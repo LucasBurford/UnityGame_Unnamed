@@ -44,8 +44,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public Surface surface;
-
     #endregion
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
