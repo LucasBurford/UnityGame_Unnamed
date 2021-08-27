@@ -466,7 +466,31 @@ public class GameManager : MonoBehaviour
         shouldIncrease = true;
     }
 
-    IEnumerator DeathCrossfade(float seconds)
+    public IEnumerator AreaCrossfade(float seconds)
+    {
+        // Stop player from moving while it fades
+        player.CanMove = false;
+
+        // Start regular crossfade animation
+        crossfadeAnimator.SetTrigger("Start");
+
+        // Make player invisible
+        player.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+
+        // Wait
+        yield return new WaitForSeconds(seconds);
+
+        // Start reverse crossfade animation
+        crossfadeAnimator.SetTrigger("Reverse");
+
+        // Make player visible
+        player.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+
+        // Alow player to move again
+        player.CanMove = true;
+    }
+
+    public IEnumerator DeathCrossfade(float seconds)
     {
         // Start regular crossfade animation
         crossfadeAnimator.SetTrigger("Start");

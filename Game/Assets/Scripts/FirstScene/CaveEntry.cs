@@ -12,6 +12,9 @@ public class CaveEntry : MonoBehaviour
     {
         if (collision.gameObject.name == "Player_Knight")
         {
+            // Start crossfade
+            StartCoroutine(gameManager.AreaCrossfade(2));
+
             // Set checkpoint to entry point of cave
             gameManager.SetCheckpoint(new Vector3(-143,-107,0));
 
