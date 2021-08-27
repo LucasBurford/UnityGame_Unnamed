@@ -16,9 +16,12 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody2D rb;
     public Camera cam;
+
     public AudioSource audioSource;
     public AudioClip audioGrass;
     public AudioClip audioWater;
+    public AudioClip audioWood;
+    public AudioClip audioStone;
 
     Vector2 movement;
 
@@ -28,6 +31,8 @@ public class PlayerMovement : MonoBehaviour
     {
         grass,
         water,
+        wood,
+        stone
     }
 
     public Surface surface;
@@ -56,15 +61,56 @@ public class PlayerMovement : MonoBehaviour
             isRunning = false;
         }
 
-        #region Surface audio
+        SurfaceAudio();
+    }
+
+    private void SurfaceAudio()
+    {
+        switch (surface)
+        {
+            case Surface.grass:
+            {
+                    audioSource.clip = audioGrass;
+                }
+            break;
+
+            case Surface.water:
+                {
+                    audioSource.clip = audioWater;
+                }
+                break;
+
+            case Surface.wood:
+                {
+                    audioSource.clip = audioWood;
+                }
+                break;
+
+            case Surface.stone:
+                {
+                    audioSource.clip = audioStone;
+                }
+                break;
+        }
+
         if (surface == Surface.grass)
         {
-            audioSource.clip = audioGrass;
+            
         }
 
         if (surface == Surface.water)
         {
-            audioSource.clip = audioWater;
+            
+        }
+
+        if (surface == Surface.wood)
+        {
+            
+        }
+
+        if (surface == Surface.stone)
+        {
+            
         }
 
         if (isRunning)
@@ -78,7 +124,6 @@ public class PlayerMovement : MonoBehaviour
         {
             audioSource.Stop();
         }
-        #endregion
     }
 
     private void FixedUpdate()
