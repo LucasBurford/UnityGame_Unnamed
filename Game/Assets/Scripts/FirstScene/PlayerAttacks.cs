@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerAttacks : MonoBehaviour
 {
@@ -35,6 +36,9 @@ public class PlayerAttacks : MonoBehaviour
 
     // Reference to player rigid body
     public Rigidbody2D playerRB;
+
+    // Reference to torch light
+    public Light2D torchLight;
 
     // Mouse position
     Vector2 mousePos;
@@ -206,9 +210,21 @@ public class PlayerAttacks : MonoBehaviour
         }
     }
 
+    // Turn torch on or off
     public void UseTorch(bool state)
     {
-
+        // If state is false, i.e. the torch is OFF
+        if (state == false)
+        {
+            // Turn the torch on
+            torchLight.enabled = true;
+        }
+        // Else if state is true, i.e. the torch is ON
+        if (state == true)
+        {
+            // Turn the torch off
+            torchLight.enabled = false;
+        }
     }
 
     IEnumerator PlaySwordSwipe()

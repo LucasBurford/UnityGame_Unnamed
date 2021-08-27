@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public HealthBar healthBar;
     #endregion
 
-    #region Powerups/Attack stuff
+    #region Powerups/Attack stuff/Items
     [Header("Powerups")]
 
     public Powerups powerups;
@@ -50,6 +50,9 @@ public class GameManager : MonoBehaviour
 
     // Bool to determine if player has the map, and one for it is open or closed - false = closed, true = open
     public bool hasMap, mapState;
+
+    // Bool to determine if player has the torch, and one for if it is on or off - false = off, true = on
+    public bool hasTorch, torchState;
 
     // List of collected healing plants
     public int collectedHealingPlants;
@@ -229,6 +232,7 @@ public class GameManager : MonoBehaviour
     // Handle keyboard inputs
     private void CheckKeyboardInput()
     {
+        #region Powerups
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             powerups = Powerups.fire;
@@ -249,6 +253,7 @@ public class GameManager : MonoBehaviour
         {
             powerups = Powerups.none;
         }
+        #endregion
 
         // If player has the heal ability, has healing plants in their inventory, is missing some health and presses E
         if (Input.GetKeyDown(KeyCode.E) && canHeal && collectedHealingPlants > 0 && currentHealth < maxHealth)
@@ -284,6 +289,26 @@ public class GameManager : MonoBehaviour
 
             // Call UseMap function and pass in state
             playerAttacks.UseMap(mapState);
+        }
+
+        // If player presses E, has torch
+        if (Input.GetKeyDown(KeyCode.E) && hasTorch)
+        {
+            // If torch is off
+            if (!torchState)
+            {
+                // Turn torch on
+                torchState = true;
+            }
+            // Else if torch is on
+            else if (torchState)
+            {
+                // Turn torch off
+                torchState = false;
+            }
+
+            // Call UseTorch and pass in state
+            playerAttacks.UseTorch(torchState);
         }
     }
 
