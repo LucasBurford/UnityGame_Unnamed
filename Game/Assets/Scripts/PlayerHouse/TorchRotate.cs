@@ -21,7 +21,7 @@ public class TorchRotate : MonoBehaviour
             gameManager.hasTorch = true;
             torchLight.enabled = true;
 
-            FindObjectOfType<ItemAcquired>().DisplayItemText("Torch \n Press E to use", 5);
+            FindObjectOfType<ItemAcquired>().DisplayItemText("Torch", "Use with", "E", 5);
 
             Destroy(gameObject);
         }

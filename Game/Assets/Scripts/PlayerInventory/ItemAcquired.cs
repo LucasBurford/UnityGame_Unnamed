@@ -44,6 +44,28 @@ public class ItemAcquired : MonoBehaviour
         StartCoroutine(Wait(seconds));
     }
 
+    /// <summary>
+    /// Displays text of the item the player has just acquired, with extra optional parameters
+    /// </summary>
+    /// <param name="item">Item acquired</param>
+    /// <param name="usage">How to use it</param>
+    /// <param name="key">What key to press</param>
+    /// <param name="seconds">Time for text to disappear</param>
+    public void DisplayItemText(string item, string usage, string key, int seconds)
+    {
+        // Enable the text
+        EnableDisable(true);
+
+        // Set the text
+        itemAcquiredText.text = "New item acquired! \n*" + item + "*" + "\n Use with '" + key + "'";
+
+        // Play item acquired sound
+        FindObjectOfType<AudioManager>().Play("ItemAcquire");
+
+        // Remove text after passed in time
+        StartCoroutine(Wait(seconds));
+    }
+
     private void EnableDisable(bool state)
     {
         itemAcquiredText.GetComponent<TextMeshProUGUI>().enabled = state;
