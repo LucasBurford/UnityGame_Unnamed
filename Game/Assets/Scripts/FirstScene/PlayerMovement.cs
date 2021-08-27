@@ -86,14 +86,6 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.name == "PlayerHouse")
-        {
-            SceneManager.LoadScene("PlayerHouse");
-        }
-    }
-
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.name == "CampFire" && gameManager.currentHealth < 100)

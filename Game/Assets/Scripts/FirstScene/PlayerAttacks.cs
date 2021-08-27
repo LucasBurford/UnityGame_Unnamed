@@ -206,6 +206,11 @@ public class PlayerAttacks : MonoBehaviour
         }
     }
 
+    public void UseTorch(bool state)
+    {
+
+    }
+
     IEnumerator PlaySwordSwipe()
     {
         yield return new WaitForSeconds(0.3f);
