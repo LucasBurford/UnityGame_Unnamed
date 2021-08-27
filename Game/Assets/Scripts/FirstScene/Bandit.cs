@@ -82,9 +82,6 @@ public class Bandit : MonoBehaviour {
             transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
 
-        // Move
-        m_body2d.velocity = new Vector2(inputX * m_speed, m_body2d.velocity.y);
-
         //Set AirSpeed in animator
         m_animator.SetFloat("AirSpeed", m_body2d.velocity.y);
 
@@ -103,11 +100,6 @@ public class Bandit : MonoBehaviour {
         else if (Input.GetKeyDown("q"))
             m_animator.SetTrigger("Hurt");
 
-        //Attack
-        //else if(Input.GetMouseButtonDown(0) && gameManager.powerups == GameManager.Powerups.none && gameManager.canAttack) {
-        //    m_animator.SetTrigger("Attack");
-        //}
-
         //Change between idle and combat idle
         else if (Input.GetKeyDown("f"))
             m_combatIdle = !m_combatIdle;
@@ -122,7 +114,7 @@ public class Bandit : MonoBehaviour {
         }
 
         //Run
-        else if (Mathf.Abs(inputX) > Mathf.Epsilon)
+        else if (Mathf.Abs(inputX) > Mathf.Epsilon && FindObjectOfType<PlayerMovement>().CanMove)
             m_animator.SetInteger("AnimState", 2);
 
         else if (Mathf.Abs(inputY) > Mathf.Epsilon)

@@ -27,6 +27,14 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isRunning;
 
+    // Bool to determine if player can move
+    private bool canMove;
+    public bool CanMove
+    {
+        get { return canMove; }
+        set { canMove = value; }
+    }
+
     public enum Surface
     {
         grass,
@@ -42,12 +50,33 @@ public class PlayerMovement : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
+        canMove = true;
+
         surface = Surface.grass;
         moveSpeed = 5f;
     }
 
     // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
+    {
+        Debug.Log(canMove);
+
+        if (canMove)
+        {
+            Movement();
+        }
+        else
+        {
+            movement = new Vector2(0, 0);
+            return;
+        }
+
+        SurfaceAudio();
+        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    // Handle Movement
+    private void Movement()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
@@ -60,8 +89,12 @@ public class PlayerMovement : MonoBehaviour
         {
             isRunning = false;
         }
+    }
 
-        SurfaceAudio();
+    // Move the player to a specified position
+    public void SetPosition(Vector3 newPosition)
+    {
+        transform.position = newPosition;
     }
 
     private void SurfaceAudio()
@@ -69,10 +102,10 @@ public class PlayerMovement : MonoBehaviour
         switch (surface)
         {
             case Surface.grass:
-            {
+                {
                     audioSource.clip = audioGrass;
                 }
-            break;
+                break;
 
             case Surface.water:
                 {
@@ -106,17 +139,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-    }
-
-    // Move the player to a specified position
-    public void SetPosition(Vector3 newPosition)
-    {
-        transform.position = newPosition;
-    }
-
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.name == "CampFire" && gameManager.currentHealth < 100)
@@ -126,5 +148,15 @@ public class PlayerMovement : MonoBehaviour
             // Drain energy from fire - DO NOT CHANGE THIS VALUE 
             campfire.energy -= 0.030f;
         }
+    }
+
+    // Stop player moving
+    public IEnumerator StopPlayerMoving(float seconds)
+    {
+        canMove = false;
+
+        yield return new WaitForSeconds(seconds);
+
+        canMove = true;
     }
 }

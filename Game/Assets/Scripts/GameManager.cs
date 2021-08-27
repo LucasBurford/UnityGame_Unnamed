@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     #region Gameplay
     // This Vector3 will act as a 'checkpoint' - send player back here whenever they die. Set manually at certain locations
-    [HideInInspector] public Vector3 checkpoint;
+    [SerializeField] private Vector3 checkpoint;
     #endregion
 
     #region Misc
@@ -422,6 +422,9 @@ public class GameManager : MonoBehaviour
 
         // Send player back to checkpoint location
         player.SetPosition(checkpoint);
+
+        // Freeze movement for a second
+        StartCoroutine(player.StopPlayerMoving(5));
     }
 
     // Set respawn point for player
