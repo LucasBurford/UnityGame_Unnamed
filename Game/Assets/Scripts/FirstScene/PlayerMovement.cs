@@ -93,26 +93,6 @@ public class PlayerMovement : MonoBehaviour
                 break;
         }
 
-        if (surface == Surface.grass)
-        {
-            
-        }
-
-        if (surface == Surface.water)
-        {
-            
-        }
-
-        if (surface == Surface.wood)
-        {
-            
-        }
-
-        if (surface == Surface.stone)
-        {
-            
-        }
-
         if (isRunning)
         {
             if (!audioSource.isPlaying)
@@ -131,6 +111,12 @@ public class PlayerMovement : MonoBehaviour
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
     }
 
+    // Move the player to a specified position
+    public void SetPosition(Vector3 newPosition)
+    {
+        transform.position = newPosition;
+    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.name == "CampFire" && gameManager.currentHealth < 100)
@@ -140,7 +126,5 @@ public class PlayerMovement : MonoBehaviour
             // Drain energy from fire - DO NOT CHANGE THIS VALUE 
             campfire.energy -= 0.030f;
         }
-
-        Debug.Log(name + ":" + collision.gameObject.name);
     }
 }

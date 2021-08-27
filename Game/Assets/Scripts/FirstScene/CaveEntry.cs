@@ -5,13 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class CaveEntry : MonoBehaviour
 {
-    public GameObject player;
+    public PlayerMovement player;
+    public GameManager gameManager;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == "Player_Knight")
         {
-            player.transform.position = new Vector3(-143, -107, 0);
+            // Set checkpoint to entry point of cave
+            gameManager.SetCheckpoint(new Vector3(-143,-107,0));
+
+            // Set player position to entry point of cave
+            player.SetPosition(new Vector3(-143, -107, 0));
         }
     }
 }

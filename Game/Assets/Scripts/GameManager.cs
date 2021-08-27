@@ -85,12 +85,16 @@ public class GameManager : MonoBehaviour
     public bool shouldIncrease;
     #endregion
 
+    #region Gameplay
+    // This Vector3 will act as a 'checkpoint' - send player back here whenever they die. Set manually at certain locations
+    [HideInInspector] public Vector3 checkpoint;
+    #endregion
+
     #region Misc
     [Header("Misc")]
-
-    private static GameObject instance;
-
     public Bandit bandit;
+
+    public PlayerMovement player;
 
     // Bool to determine if player is in dialogue
     public bool isInDialogue;
@@ -409,9 +413,22 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Gameplay
+    // Handle player death
     public void Die(string cause)
     {
         Debug.Log("Cause of death " + cause);
+
+        // Play sound
+
+        // Send player back to checkpoint location
+        player.SetPosition(checkpoint);
+    }
+
+    // Set respawn point for player
+    public void SetCheckpoint(Vector3 pCheckpoint)
+    {
+        Debug.Log("Checkpoint set at: " + pCheckpoint);
+        checkpoint = pCheckpoint;
     }
     #endregion
 
