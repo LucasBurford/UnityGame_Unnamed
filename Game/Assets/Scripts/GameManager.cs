@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
     #region Misc
     [Header("Misc")]
 
+    private static GameObject instance;
+
     public Bandit bandit;
 
     // Bool to determine if player is in dialogue

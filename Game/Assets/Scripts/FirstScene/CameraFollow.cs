@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+    private static GameObject instance;
+
     public Transform target;
 
     private void Start()

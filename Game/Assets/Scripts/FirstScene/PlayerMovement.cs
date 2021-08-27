@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     #region Members
+    private static GameObject instance;
+
     public GameManager gameManager;
 
     public FireFlicker campfire;
@@ -34,6 +36,16 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
+
+        if (instance == null)
+        {
+            instance = gameObject;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         surface = Surface.grass;
         moveSpeed = 5f;
     }
@@ -100,5 +112,7 @@ public class PlayerMovement : MonoBehaviour
             // Drain energy from fire - DO NOT CHANGE THIS VALUE 
             campfire.energy -= 0.030f;
         }
+
+        Debug.Log(name + ":" + collision.gameObject.name);
     }
 }
