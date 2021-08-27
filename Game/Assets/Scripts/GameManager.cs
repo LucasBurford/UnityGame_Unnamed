@@ -92,6 +92,9 @@ public class GameManager : MonoBehaviour
 
     #region Misc
     [Header("Misc")]
+    // Reference to crossfade animator
+    public Animator crossfadeAnimator;
+
     public Bandit bandit;
 
     public PlayerMovement player;
@@ -104,6 +107,9 @@ public class GameManager : MonoBehaviour
 
     // Hold reference to Village text
     public TMP_Text proceedToVillageText;
+
+    // Cause of death text
+    public TMP_Text causeOfDeathText;
 
     // List of enemies to set active at night
     public List<GameObject> enemyList;
@@ -416,15 +422,21 @@ public class GameManager : MonoBehaviour
     // Handle player death
     public void Die(string cause)
     {
-        Debug.Log("Cause of death " + cause);
+        // Display the cause of death
+        causeOfDeathText.GetComponent<TextMeshProUGUI>().enabled = true;
+        causeOfDeathText.text = cause;
 
         // Play sound
+        FindObjectOfType<AudioManager>().Play("PlayerDeath");
 
         // Send player back to checkpoint location
         player.SetPosition(checkpoint);
 
+        // Trigger fade
+        StartCoroutine(DeathCrossfade(2));
+
         // Freeze movement for a second
-        StartCoroutine(player.StopPlayerMoving(5));
+        StartCoroutine(player.StopPlayerMoving(2));
     }
 
     // Set respawn point for player
@@ -452,6 +464,21 @@ public class GameManager : MonoBehaviour
 
         // Start time increasing 
         shouldIncrease = true;
+    }
+
+    IEnumerator DeathCrossfade(float seconds)
+    {
+        // Start regular crossfade animation
+        crossfadeAnimator.SetTrigger("Start");
+
+        // Wait
+        yield return new WaitForSeconds(seconds);
+
+        // Disable text
+        causeOfDeathText.GetComponent<TextMeshProUGUI>().enabled = false;
+
+        // Start reverse crossfade animation
+        crossfadeAnimator.SetTrigger("Reverse");
     }
 
     // Remove text after a certain time
