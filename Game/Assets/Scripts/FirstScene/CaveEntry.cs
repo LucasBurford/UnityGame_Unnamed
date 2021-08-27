@@ -11,7 +11,7 @@ public class CaveEntry : MonoBehaviour
     {
         if (collision.gameObject.name == "Player_Knight")
         {
-            player.transform.position = new Vector3(-157, -121, 0);
+            player.transform.position = new Vector3(-143, -107, 0);
         }
     }
 }

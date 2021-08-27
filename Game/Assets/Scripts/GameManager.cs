@@ -133,6 +133,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         UpdateUIElements();
+        CheckHealth();
         CheckMouseInput();
         CheckKeyboardInput();
         CheckTime();
@@ -181,6 +182,14 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Checks
+    // Check player health
+    public void CheckHealth()
+    {
+        if (currentHealth <= 0)
+        {
+            Die("Misadventure");
+        }
+    }
     // Check amount of XP player has and level up if need to 
     private void CheckXPAmount()
     {
@@ -396,6 +405,13 @@ public class GameManager : MonoBehaviour
             proceedToVillageText.text = "All powerups acquired! \n Proceed to Highpoint Village";
             StartCoroutine(RemoveText());
         }
+    }
+    #endregion
+
+    #region Gameplay
+    public void Die(string cause)
+    {
+        Debug.Log("Cause of death " + cause);
     }
     #endregion
 
