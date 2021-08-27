@@ -37,15 +37,6 @@ public class PlayerMovement : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        if (instance == null)
-        {
-            instance = gameObject;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
         surface = Surface.grass;
         moveSpeed = 5f;
     }

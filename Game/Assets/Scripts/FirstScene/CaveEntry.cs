@@ -11,9 +11,7 @@ public class CaveEntry : MonoBehaviour
     {
         if (collision.gameObject.name == "Player_Knight")
         {
-            SceneManager.LoadScene("Cave", LoadSceneMode.Single);
-            Instantiate(player);
-            player.transform.position = new Vector3(7, -2, 0);
+            player.transform.position = new Vector3(-157, -121, 0);
         }
     }
 }
