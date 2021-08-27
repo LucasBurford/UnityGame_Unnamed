@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - Ground
+  - Block
+  - Enemy
+  - BossKnight
+  - PondFlower
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - Obstacle
+  - Enemies
+  - Player
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - Layer 1
+  - Layer 2
+  - Layer 3
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: TP Ground
+    uniqueID: 3782955383
+    locked: 0
+  - name: TP UndergroundBackground
+    uniqueID: 965973559
+    locked: 0
+  - name: TP Buildings
+    uniqueID: 2913057227
+    locked: 0
+  - name: TP Underground
+    uniqueID: 1642938659
+    locked: 0
+  - name: Underground Scenery
+    uniqueID: 1441135379
+    locked: 0
+  - name: Village
+    uniqueID: 2518068953
+    locked: 0
+  - name: Bushes
+    uniqueID: 4275351615
+    locked: 0
+  - name: ActualPlayer
+    uniqueID: 3820763415
+    locked: 0
+  - name: Scenery
+    uniqueID: 3590223143
+    locked: 0
+  - name: DialogueUI
+    uniqueID: 210051621
+    locked: 0
