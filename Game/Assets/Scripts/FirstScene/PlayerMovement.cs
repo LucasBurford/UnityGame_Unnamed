@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     #region Members
-    private static GameObject instance;
+    private Material material;
 
     public GameManager gameManager;
 
@@ -26,6 +26,10 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
 
     public bool isRunning;
+
+    private bool isDissolving;
+    private bool isReverseDisolving;
+    public float fade;
 
     // Bool to determine if player can move
     private bool canMove;
@@ -50,6 +54,9 @@ public class PlayerMovement : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
+        material = GetComponent<SpriteRenderer>().material;
+        fade = 1;
+
         canMove = true;
 
         surface = Surface.grass;
@@ -69,6 +76,15 @@ public class PlayerMovement : MonoBehaviour
         {
             movement = new Vector2(0, 0);
             return;
+        }
+
+        if (isDissolving)
+        {
+            Dissolve();
+        }
+        else if (isReverseDisolving)
+        {
+            ReverseDissolve();
         }
 
         SurfaceAudio();
@@ -137,6 +153,44 @@ public class PlayerMovement : MonoBehaviour
         {
             audioSource.Stop();
         }
+    }
+
+    public void StartDissolve()
+    {
+        isDissolving = true;
+    }
+
+    public void SetReverseDissolve()
+    {
+        isReverseDisolving = true;
+    }
+
+    private void Dissolve()
+    {
+        fade -= 0.01f;
+
+        if (fade <= 0)
+        {
+            fade = 0;
+            isDissolving = false;
+        }
+
+        material.SetColor("Color_3A09B3A0", new Color(240, 5, 5));
+        material.SetFloat("_Fade", fade);
+    }
+
+    private void ReverseDissolve()
+    {
+        fade += 0.01f;
+
+        if (fade >= 1)
+        {
+            fade = 1;
+            isReverseDisolving = false;
+        }
+
+        material.SetColor("Color_3A09B3A0", new Color(0, 240, 255));
+        material.SetFloat("_Fade", fade);
     }
 
     private void OnCollisionStay2D(Collision2D collision)

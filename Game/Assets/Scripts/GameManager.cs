@@ -429,14 +429,11 @@ public class GameManager : MonoBehaviour
         // Play sound
         FindObjectOfType<AudioManager>().Play("PlayerDeath");
 
-        // Send player back to checkpoint location
-        player.SetPosition(checkpoint);
+        // Start dissolve effect
+        player.StartDissolve();
 
-        // Trigger fade
-        StartCoroutine(DeathCrossfade(2));
-
-        // Freeze movement for a second
-        StartCoroutine(player.StopPlayerMoving(2));
+        // After player has dissolved, then do area death crossfade
+        StartCoroutine(WaitForDissolve(2));
     }
 
     // Set respawn point for player
@@ -503,6 +500,33 @@ public class GameManager : MonoBehaviour
 
         // Start reverse crossfade animation
         crossfadeAnimator.SetTrigger("Reverse");
+
+        // Start reverse death fade, i.e. respawn fade
+        StartCoroutine(WaitForReverseDissolve(2));
+    }
+
+    IEnumerator WaitForDissolve(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        // Trigger fade
+        StartCoroutine(DeathCrossfade(2));
+
+        // Send player back to checkpoint location
+        player.SetPosition(checkpoint);
+
+        // Freeze movement for a second
+        StartCoroutine(player.StopPlayerMoving(2));
+    }
+
+    IEnumerator WaitForReverseDissolve(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        // Send player back to checkpoint location
+        player.SetPosition(checkpoint);
+
+        player.SetReverseDissolve();
     }
 
     // Remove text after a certain time
