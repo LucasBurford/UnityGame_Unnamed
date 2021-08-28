@@ -22,5 +22,6 @@ public class CameraFollow : MonoBehaviour
     public void ChangeAudioClip(AudioClip newClip)
     {
         gameObject.GetComponent<AudioSource>().clip = newClip;
+        gameObject.GetComponent<AudioSource>().Play();
     }
 }

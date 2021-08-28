@@ -6,7 +6,7 @@ public class CaveCollider : MonoBehaviour
 {
     public PlayerMovement playerMovement;
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         playerMovement.surface = PlayerMovement.Surface.stone;
     }

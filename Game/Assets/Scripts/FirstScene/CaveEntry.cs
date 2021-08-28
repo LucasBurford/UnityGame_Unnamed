@@ -8,6 +8,8 @@ public class CaveEntry : MonoBehaviour
     public PlayerMovement player;
     public GameManager gameManager;
 
+    public AudioClip newClip;
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == "Player_Knight")
@@ -20,6 +22,9 @@ public class CaveEntry : MonoBehaviour
 
             // Set player position to entry point of cave
             player.SetPosition(new Vector3(-143, -107, 0));
+
+            // Set Cave audio
+            FindObjectOfType<CameraFollow>().ChangeAudioClip(newClip);
         }
     }
 }
