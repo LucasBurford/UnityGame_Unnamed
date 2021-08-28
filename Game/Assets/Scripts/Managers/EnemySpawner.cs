@@ -51,9 +51,15 @@ public class EnemySpawner : MonoBehaviour
                 }
             }
         }
-        else
+        // Else if it is day time
+        else if (!isNight)
         {
-            return;
+            // Remove enemies from world
+            RemoveEnemy();
+
+            // Remove it from list
+            enemyList.Clear();
+
         }
     }
 
@@ -67,6 +73,18 @@ public class EnemySpawner : MonoBehaviour
 
         // Add enemy to the list
         enemyList.Add(enemy);
+    }
+
+    private void RemoveEnemy()
+    {
+        // Iterate through enemy list and destroy them
+        foreach (GameObject go in enemyList)
+        {
+            // Start dissolve effect on enemy
+
+            // Remove it from world
+            Destroy(go);
+        }
     }
 
     private float GetRandomNumber(float a, float b)

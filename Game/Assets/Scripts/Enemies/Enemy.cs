@@ -11,6 +11,17 @@ public class Enemy : MonoBehaviour
     public float health;
     public float damage;
 
+    // Dissolve factor
+    [SerializeField]
+    private float fade;
+
+    // Reference to Dissolve material
+    [SerializeField]
+    private Material material;
+
+    [SerializeField]
+    private bool isDissolving;
+
     int rand;
 
     // Start is called before the first frame update
@@ -57,7 +68,7 @@ public class Enemy : MonoBehaviour
     private void DamagePlayer()
     {
         gameManager.TakeDamage(damage);
-        Wait();
+        Wait(2);
     }
 
     public void TakeDamage(float amount)
@@ -86,12 +97,14 @@ public class Enemy : MonoBehaviour
 
         FindObjectOfType<AudioManager>().Play("TrollDeath");
 
-        Destroy(gameObject);
+        StartCoroutine(Wait(2));
     }
 
-    IEnumerator Wait()
+    IEnumerator Wait(float seconds)
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(seconds);
+
+        Destroy(gameObject);
     }
 
     IEnumerator SpeedBackUp()

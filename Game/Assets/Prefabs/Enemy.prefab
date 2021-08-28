@@ -131,6 +131,9 @@ MonoBehaviour:
   moveSpeed: 0
   health: -1300
   damage: 0
+  fade: 0
+  material: {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
+  isDissolving: 0
 --- !u!50 &3820127271635960410
 Rigidbody2D:
   serializedVersion: 4
@@ -229,7 +232,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
