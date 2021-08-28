@@ -14,6 +14,9 @@ public class Enemy : MonoBehaviour
     // Dissolve factor
     [SerializeField]
     private float fade;
+    
+    [SerializeField]
+    private float fadeFactor;
 
     // Reference to Dissolve material
     [SerializeField]
@@ -41,7 +44,7 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (health <= 0)
         {
@@ -54,6 +57,16 @@ public class Enemy : MonoBehaviour
         if (rand == 50)
         {
             FindObjectOfType<AudioManager>().Play("TrollIdle");
+        }
+
+        if (isDissolving)
+        {
+            Debug.Log("Is dissolving");
+            Dissolve();
+        }
+        else
+        {
+            Debug.Log("Not dissolving");
         }
     }
 
@@ -98,6 +111,26 @@ public class Enemy : MonoBehaviour
         FindObjectOfType<AudioManager>().Play("TrollDeath");
 
         StartCoroutine(Wait(2));
+    }
+
+    public void StartDissolve()
+    {
+        Debug.Log("Start dissolve");
+
+        isDissolving = true;
+    }
+
+    private void Dissolve()
+    {
+        fade -= 0.01f;
+
+        if (fade <= 0)
+        {
+            fade = 0;
+            isDissolving = false;
+        }
+
+        material.SetFloat("_Fade", fade);
     }
 
     IEnumerator Wait(float seconds)

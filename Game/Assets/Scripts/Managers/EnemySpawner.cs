@@ -59,7 +59,6 @@ public class EnemySpawner : MonoBehaviour
 
             // Remove it from list
             enemyList.Clear();
-
         }
     }
 
@@ -80,10 +79,10 @@ public class EnemySpawner : MonoBehaviour
         // Iterate through enemy list and destroy them
         foreach (GameObject go in enemyList)
         {
-            // Start dissolve effect on enemy
+            // Get Enemy script
+            go.GetComponent<Enemy>().StartDissolve();
 
-            // Remove it from world
-            Destroy(go);
+            StartCoroutine(Wait(2, go));
         }
     }
 
@@ -101,5 +100,13 @@ public class EnemySpawner : MonoBehaviour
     public void ChangeDayOrNight(bool time)
     {
         isNight = time;
+    }
+
+    IEnumerator Wait(float seconds, GameObject go)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        // Remove it from world
+        Destroy(go);
     }
 }
