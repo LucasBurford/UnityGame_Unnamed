@@ -7,7 +7,7 @@ public class CaveEntry : MonoBehaviour
 {
     public PlayerMovement player;
     public GameManager gameManager;
-
+    public CaveExit caveExit;
     public AudioClip newClip;
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -22,6 +22,9 @@ public class CaveEntry : MonoBehaviour
 
             // Set player position to entry point of cave
             player.SetPosition(new Vector3(-143, -107, 0));
+
+            // Set isInCave to true
+            caveExit.isInCave = true;
 
             // Set Cave audio
             FindObjectOfType<CameraFollow>().ChangeAudioClip(newClip);

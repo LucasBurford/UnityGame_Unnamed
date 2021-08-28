@@ -22,7 +22,6 @@ public class WindAttack : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log(collision.gameObject.name);
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
 
         if (enemy != null)
