@@ -95,7 +95,7 @@ public class PlayerAttacks : MonoBehaviour
 
         meleeDamage = 500;
 
-        attackRange = 1;
+        attackRange = 2;
     }
 
     // Update is called once per frame

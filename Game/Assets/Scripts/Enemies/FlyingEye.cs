@@ -125,7 +125,7 @@ public class FlyingEye : MonoBehaviour, IEnemy
     private void OnCollisionStay2D(Collision2D collision)
     {
         // If the enemy hasn't attacked, or is not waiting between attacks
-        if (!hasAttacked)
+        if (!hasAttacked && !hasDied)
         {
             if (collision.gameObject.name == "Player_Knight")
             {
@@ -140,7 +140,11 @@ public class FlyingEye : MonoBehaviour, IEnemy
 
     public void Die()
     {
+        hasDied = true;
+
         isDissolving = true;
+
+        FindObjectOfType<AudioManager>().Play("FlyingEyeDeath");
 
         StartCoroutine(WaitToDissolve(2));
     }

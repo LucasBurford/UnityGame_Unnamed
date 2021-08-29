@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
+  - {fileID: 2100000, guid: 24835a0ed18030f49b59db643ae0e197, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -169,7 +169,7 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   animator: {fileID: 7768046404533121499}
   attackPoint: {fileID: 7768046404703088801}
-  material: {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
+  material: {fileID: 2100000, guid: 24835a0ed18030f49b59db643ae0e197, type: 2}
   maxHealth: 0
   currentHealth: 0
   attackRange: 1.8

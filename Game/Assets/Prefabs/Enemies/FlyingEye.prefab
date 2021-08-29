@@ -57,7 +57,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
+  - {fileID: 2100000, guid: 505463b41addd4545ac10fed3842f15e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -248,8 +248,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   animator: {fileID: 5597544863477499766}
-  material: {fileID: 2100000, guid: dfaddd08f9c825646848723c73a1918b, type: 2}
-  maxHealth: 70
+  material: {fileID: 2100000, guid: 505463b41addd4545ac10fed3842f15e, type: 2}
+  maxHealth: 50
   currentHealth: 0
   damage: 5
   fade: 1
