@@ -37,6 +37,9 @@ public class Skeleton : MonoBehaviour
 
     [SerializeField]
     private bool isDissolving;
+
+    private bool hasPlayed;
+
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -72,6 +75,11 @@ public class Skeleton : MonoBehaviour
             }
 
             material.SetFloat("_Fade", fade);
+        }
+
+        if (Random.Range(0, 1000) < 10)
+        {
+            PlaySkeletonSound("SkeletonIdle");
         }
     }
 
@@ -113,14 +121,26 @@ public class Skeleton : MonoBehaviour
     {
         Debug.Log("Skeleton died");
 
-        // Play dissolve animation
-        isDissolving = true;
-
         // Set canAttack to false so he doesn't attack while dissolving
         canAttack = false;
 
+        if (!hasPlayed)
+        {
+            PlaySkeletonSound("SkeletonDeath");
+        }
+
+        hasPlayed = true;
+
+        // Play dissolve animation
+        isDissolving = true;
+
         // Wait for time to destroy object
-        StartCoroutine(WaitToDestroy(1.5f));
+        StartCoroutine(WaitToDestroy(3));
+    }
+
+    private void PlaySkeletonSound(string name)
+    {
+        FindObjectOfType<AudioManager>().Play(name);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
