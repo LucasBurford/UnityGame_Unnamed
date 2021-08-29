@@ -24,6 +24,9 @@ public class Skeleton : MonoBehaviour
     private float attackRange;
 
     [SerializeField]
+    private float maxDamage;
+
+    [SerializeField]
     private float damage;
 
     [SerializeField]
@@ -38,18 +41,22 @@ public class Skeleton : MonoBehaviour
     [SerializeField]
     private bool isDissolving;
 
+    public bool isBeingBlocked;
+
     private bool hasPlayed;
 
     #endregion
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
+
         maxHealth = 200;
         currentHealth = maxHealth;
 
         fade = 1;
 
-        damage = 0;
+        damage = maxDamage;
 
         canAttack = true;
 
@@ -88,15 +95,16 @@ public class Skeleton : MonoBehaviour
         // Get collided objects by casting a circle
         Collider2D[] objects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
 
-        foreach(Collider2D col in objects)
+        foreach (Collider2D col in objects)
         {
+            // Handle collision with player
             if (col.gameObject.tag == "Player")
             {
                 Debug.Log("Hit Player");
 
                 // Play attack animation
                 animator.SetBool("IsAttacking", true);
-                
+
                 //-- Take damage moved to ResetAttackAnimation to match animation timings --\\
 
                 // Set canAttack to false
@@ -107,6 +115,12 @@ public class Skeleton : MonoBehaviour
 
                 // Set canAttack back to true
                 StartCoroutine(ResetAttackBool(2));
+            }
+
+            // Handle shield block audio
+            if (col.gameObject.name == "PlayerShield")
+            {
+                StartCoroutine(WaitToPlayShieldSound(0.7f));
             }
         }
     }
@@ -158,6 +172,20 @@ public class Skeleton : MonoBehaviour
         }
     }
 
+    public void ChangeAttackDamage(float amount)
+    {
+        damage = amount;
+
+        StartCoroutine(ResetAttackDamage(2));
+    }
+
+    IEnumerator ResetAttackDamage(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        damage = maxDamage;
+    }
+
     IEnumerator ResetAttackAnimation(float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -181,5 +209,21 @@ public class Skeleton : MonoBehaviour
         yield return new WaitForSeconds(seconds);
 
         Destroy(gameObject);
+    }
+
+    IEnumerator WaitToPlayShieldSound (float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        FindObjectOfType<AudioManager>().Play("ShieldHit");
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null)
+        {
+            return;
+        }
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

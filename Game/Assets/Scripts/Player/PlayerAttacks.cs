@@ -6,6 +6,8 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class PlayerAttacks : MonoBehaviour
 {
     #region References
+    [Header("References")]
+
     // Reference to GameManager
     public GameManager gameManager;
 
@@ -44,7 +46,9 @@ public class PlayerAttacks : MonoBehaviour
     Vector2 mousePos;
     #endregion
 
-    #region Attack prefabs
+    #region Attack/Item prefabs
+    [Header("Attack/Item prefabs")]
+
     // FireBall prefab
     public GameObject firePrefab;
     // Lightning Strike prefab
@@ -53,9 +57,14 @@ public class PlayerAttacks : MonoBehaviour
     public GameObject icePrefab;
     // Wind Attack prefab
     public GameObject windPrefab;
+
+    // Shield prefab
+    public GameObject shieldPrefab;
     #endregion
 
     #region Attack forces
+    [Header("Attack forces")]
+
     // FireBall shoot force
     public float fireForce;
     public float fireSpeed;
@@ -68,6 +77,9 @@ public class PlayerAttacks : MonoBehaviour
     // MeleeAttack damage
     public float meleeDamage;
     #endregion
+
+    [SerializeField]
+    private int shields;
 
     // Start is called before the first frame update
     void Start()
@@ -93,6 +105,7 @@ public class PlayerAttacks : MonoBehaviour
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
     }
 
+    #region Elemental attacks
     // Cast Melee Attack
     public void MeleeAttack()
     {
@@ -182,6 +195,9 @@ public class PlayerAttacks : MonoBehaviour
 
         StartCoroutine(ResetAttackTime());
     }
+    #endregion
+
+    #region Inventory Items
 
     // Open or close the map
     public void UseMap(bool state)
@@ -226,6 +242,27 @@ public class PlayerAttacks : MonoBehaviour
             torchLight.enabled = false;
         }
     }
+
+    public void UseShield(bool state)
+    {
+        // If state is true, i.e. shield is UP
+        if (state)
+        {
+            // Set position of the shield to attackPoint
+            shieldPrefab.transform.position = attackPoint.position;
+
+            // Add shield to the world
+            shieldPrefab.SetActive(true);
+        }
+
+        // If state is false, i.e. shield is DOWN
+        if (!state)
+        {
+            // Remove shield from the world
+            shieldPrefab.SetActive(false);
+        }
+    }
+    #endregion
 
     IEnumerator PlaySwordSwipe()
     {

@@ -54,6 +54,12 @@ public class GameManager : MonoBehaviour
     // Bool to determine if player has the torch, and one for if it is on or off - false = off, true = on
     public bool hasTorch, torchState;
 
+    // Bool to determine if player has the shield
+    public bool hasShield;
+
+    // Bool to determine if player is currently using shield
+    public bool usingShield;
+
     // List of collected healing plants
     public int collectedHealingPlants;
     #endregion
@@ -90,6 +96,9 @@ public class GameManager : MonoBehaviour
 
     // This Vector3 will act as a 'checkpoint' - send player back here whenever they die. Set manually at certain locations
     [SerializeField] private Vector3 checkpoint;
+
+    // Bool to determine if player is blocking so we can decide if they should take damage
+    public bool isBlocking;
 
     // Reference to EnemySpawner
     public EnemySpawner enemySpawner;
@@ -164,9 +173,15 @@ public class GameManager : MonoBehaviour
     // Remove passed in amount from player health
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
-
-        FindObjectOfType<AudioManager>().Play("PlayerHurt1");
+        if (!isBlocking)
+        {
+            currentHealth -= damage;
+            FindObjectOfType<AudioManager>().Play("PlayerHurt1");
+        }
+        else
+        {
+            Debug.Log("Attack blocked!");
+        }
     }
 
     // Add passed in amount to player health
@@ -219,6 +234,7 @@ public class GameManager : MonoBehaviour
     // Handle mouse inputs
     private void CheckMouseInput()
     {
+        #region Elemental attacks
         if (Input.GetButtonDown("Fire1") && canAttack && !isInDialogue)
         {
             if (powerups == Powerups.none)
@@ -248,6 +264,34 @@ public class GameManager : MonoBehaviour
                 canAttack = false;
             }
         }
+        #endregion
+
+        #region Shield
+        // If player holds down right mouse button, has shield and currently IS NOT using the shield
+        if (Input.GetMouseButton(1) && hasShield)
+        {
+            // Call UseShield and pass in true
+            playerAttacks.UseShield(true);
+
+            // Set isBlocking to true
+            isBlocking = true;
+
+            // Set usingShield to true
+            usingShield = true;
+        }
+        // If player is using shield and releases right mouse button
+        if (Input.GetMouseButtonUp(1) && hasShield && usingShield)
+        {
+            // Call UseShield and pass in false
+            playerAttacks.UseShield(false);
+
+            // Set isBlocking to false
+            isBlocking = false;
+
+            // Set usingShield to false
+            usingShield = false;
+        }
+        #endregion
     }
 
     // Handle keyboard inputs
@@ -292,7 +336,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // If player presses R, has map
+        // If player presses R and has map
         if (Input.GetKeyDown(KeyCode.R) && hasMap)
         {
             // If map is closed
@@ -312,7 +356,7 @@ public class GameManager : MonoBehaviour
             playerAttacks.UseMap(mapState);
         }
 
-        // If player presses E, has torch
+        // If player presses E and has torch
         if (Input.GetKeyDown(KeyCode.E) && hasTorch)
         {
             // If torch is off
