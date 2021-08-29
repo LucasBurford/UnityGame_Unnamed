@@ -86,6 +86,14 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generate and return a random Vector3. X = between x1 and x2, Y = between y1 and y2
+    /// </summary>
+    /// <param name="x1"></param>
+    /// <param name="x2"></param>
+    /// <param name="y1"></param>
+    /// <param name="y2"></param>
+    /// <returns></returns>
     private Vector3 RandomVector3(float x1, float x2, float y1, float y2)
     {
         Vector3 randPos = new Vector3(Random.Range(x1, x2), Random.Range(y1, y2), 0);
@@ -93,6 +101,12 @@ public class EnemySpawner : MonoBehaviour
         return randPos;
     }
 
+    /// <summary>
+    /// Generate a random number between a and b and return it
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     private float GetRandomNumber(float a, float b)
     {
         float x = Random.Range(a, b);

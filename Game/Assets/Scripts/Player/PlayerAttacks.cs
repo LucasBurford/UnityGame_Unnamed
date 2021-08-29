@@ -81,7 +81,7 @@ public class PlayerAttacks : MonoBehaviour
         iceSpeed = 25;
         windSpeed = 15;
 
-        meleeDamage = 500;
+        meleeDamage = 30;
 
         attackRange = 1;
     }
