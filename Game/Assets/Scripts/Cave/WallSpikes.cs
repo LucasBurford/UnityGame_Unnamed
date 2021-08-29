@@ -15,6 +15,8 @@ public class WallSpikes : MonoBehaviour
     {
         transform.position = new Vector3(-211, -112, 0);
 
+        PlaySpikeSound();
+
         // Wait 
         StartCoroutine(Wait(1.5f, 1));
     }
@@ -23,8 +25,15 @@ public class WallSpikes : MonoBehaviour
     {
         transform.position = new Vector3(-213, -112, 0);
 
+        PlaySpikeSound();
+
         // Wait 
         StartCoroutine(Wait(1.5f, 2));
+    }
+
+    private void PlaySpikeSound()
+    {
+        FindObjectOfType<AudioManager>().Play("CaveSpikeShootOut");
     }
 
     IEnumerator Wait(float seconds, int state)
