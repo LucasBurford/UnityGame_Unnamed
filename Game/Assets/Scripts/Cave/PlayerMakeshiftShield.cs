@@ -6,12 +6,6 @@ public class PlayerMakeshiftShield : MonoBehaviour
 {
     public GameManager gameManager;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -23,6 +17,8 @@ public class PlayerMakeshiftShield : MonoBehaviour
         if (collision.gameObject.name == "Player_Knight")
         {
             gameManager.hasShield = true;
+
+            gameManager.SetCheckpoint(transform.position);
 
             FindObjectOfType<ItemAcquired>().DisplayItemText("Shield", "Use to block attacks", "Right Click", 6);
 
