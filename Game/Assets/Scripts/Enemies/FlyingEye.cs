@@ -46,6 +46,9 @@ public class FlyingEye : MonoBehaviour, IEnemy
         // Get GameManager
         gameManager = FindObjectOfType<GameManager>();
 
+        // Get animator
+        animator = gameObject.GetComponent<Animator>();
+
         // Set destination
         gameObject.GetComponent<AIDestinationSetter>().target = FindObjectOfType<PlayerMovement>().gameObject.transform;
 
@@ -58,6 +61,16 @@ public class FlyingEye : MonoBehaviour, IEnemy
     // Update is called once per frame
     void Update()
     {
+        // Stop enemies from too far away from searching
+        if (Vector3.Distance(transform.position, FindObjectOfType<PlayerMovement>().transform.position) > 40)
+        {
+            gameObject.GetComponent<AIPath>().canSearch = false;
+        }
+        else
+        {
+            gameObject.GetComponent<AIPath>().canSearch = true;
+        }
+
         if (currentHealth <= 0)
         {
             Die();
@@ -74,6 +87,11 @@ public class FlyingEye : MonoBehaviour, IEnemy
             }
 
             material.SetFloat("_Fade", fade);
+        }
+
+        if (Random.Range(0, 1000) < 5)
+        {
+            FindObjectOfType<AudioManager>().Play("FlyingEyeIdle");
         }
     }
 

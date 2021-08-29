@@ -84,7 +84,7 @@ public class Skeleton : MonoBehaviour
             material.SetFloat("_Fade", fade);
         }
 
-        if (Random.Range(0, 1000) < 10)
+        if (Random.Range(0, 1000) < 5)
         {
             PlaySkeletonSound("SkeletonIdle");
         }
