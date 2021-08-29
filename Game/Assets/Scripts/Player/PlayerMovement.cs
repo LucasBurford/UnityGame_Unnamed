@@ -61,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
 
         surface = Surface.grass;
         moveSpeed = 5f;
+
+        material.SetFloat("_Fade", fade);
     }
 
     // Update is called once per frame

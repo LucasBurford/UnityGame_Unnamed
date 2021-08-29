@@ -10,7 +10,7 @@ public class EnemySpawner : MonoBehaviour
 
     // Floats to act as random number parameters
     [SerializeField]
-    private float num1, num2;
+    private float num1, num2, minX, maxX, minY, maxY;
 
     // Bool to determine if it is night time. True = yes, false = no (i.e. day)
     [SerializeField]
@@ -68,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         // Add enemy into the world
-        GameObject enemy = Instantiate(enemyPrefab, new Vector3(16, -14, 0), Quaternion.identity);
+        GameObject enemy = Instantiate(enemyPrefab, RandomVector3(minX, maxX, minY, maxY), Quaternion.identity);
 
         // Add enemy to the list
         enemyList.Add(enemy);
@@ -84,6 +84,13 @@ public class EnemySpawner : MonoBehaviour
 
             StartCoroutine(Wait(2, go));
         }
+    }
+
+    private Vector3 RandomVector3(float x1, float x2, float y1, float y2)
+    {
+        Vector3 randPos = new Vector3(Random.Range(x1, x2), Random.Range(y1, y2), 0);
+
+        return randPos;
     }
 
     private float GetRandomNumber(float a, float b)

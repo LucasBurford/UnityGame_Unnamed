@@ -39,6 +39,9 @@ public class Enemy : MonoBehaviour
         health = 100;
         damage = 10;
 
+        fade = 1;
+        material.SetFloat("_Fade", fade);
+
         // Set AI move speed
         gameObject.GetComponent<AIPath>().maxSpeed = moveSpeed;
     }
