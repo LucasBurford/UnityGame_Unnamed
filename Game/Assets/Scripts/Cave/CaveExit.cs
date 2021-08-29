@@ -7,7 +7,7 @@ public class CaveExit : MonoBehaviour
 {
     public GameManager gameManager;
     public PlayerMovement player;
-
+    public GameObject caveArea;
     private float x;
     public bool isInCave;
 
@@ -110,7 +110,7 @@ public class CaveExit : MonoBehaviour
         {
             StartCoroutine(gameManager.AreaCrossfade(2));
             player.SetPosition(new Vector3(-15, -9.8f, 0));
-
+            caveArea.SetActive(false);
             isInCave = false;
         }
     }

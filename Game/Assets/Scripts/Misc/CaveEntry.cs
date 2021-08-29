@@ -7,6 +7,7 @@ public class CaveEntry : MonoBehaviour
 {
     public PlayerMovement player;
     public GameManager gameManager;
+    public GameObject caveArea;
     public CaveExit caveExit;
     public AudioClip newClip;
 
@@ -16,6 +17,9 @@ public class CaveEntry : MonoBehaviour
         {
             // Start crossfade
             StartCoroutine(gameManager.AreaCrossfade(2));
+
+            // Set all Cave objects to active
+            caveArea.SetActive(true);
 
             // Set checkpoint to entry point of cave
             gameManager.SetCheckpoint(new Vector3(-143,-107,0));
