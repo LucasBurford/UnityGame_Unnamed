@@ -284,6 +284,11 @@ public class PlayerAttacks : MonoBehaviour
                 hObject.gameObject.GetComponent<Skeleton>().TakeDamage(meleeDamage);
             }
 
+            if (hObject.tag == "FlyingEye")
+            {
+                hObject.gameObject.GetComponent<FlyingEye>().TakeDamage(meleeDamage);
+            }
+
             if (hObject.tag == "BossKnight")
             {
                 hObject.GetComponent<BossKnight>().TakeDamage(meleeDamage);

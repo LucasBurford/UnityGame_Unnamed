@@ -10,6 +10,7 @@ TagManager:
   - BossKnight
   - PondFlower
   - Skeleton
+  - FlyingEye
   layers:
   - Default
   - TransparentFX

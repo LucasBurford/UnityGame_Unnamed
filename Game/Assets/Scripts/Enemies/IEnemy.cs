@@ -5,27 +5,19 @@ using UnityEngine;
 public interface IEnemy
 {
     /// <summary>
-    /// Reduce damage dealt to player
+    /// Attack the eneny and deduct 'damage' from their current health
     /// </summary>
-    void ReduceAttackDamage();
+    /// <param name="damage"></param>
+    void AttackPlayer();
 
     /// <summary>
-    /// Send enemy backwards
+    /// Take damage, deduct 'amount' from current health
     /// </summary>
-    void Knockback();
-
+    /// <param name="amount"></param>
+    void TakeDamage(float amount);
+    
     /// <summary>
-    /// Slow enemy move speed
+    /// When health reaches or falls below 0, call this. Destory object and reward player etc
     /// </summary>
-    void SlowDown();
-
-    /// <summary>
-    /// Set enemy move speed back to normal
-    /// </summary>
-    void SpeedBackup();
-
-    /// <summary>
-    /// Change enemy move speed to certain value
-    /// </summary>
-    void ChangeMoveSpeed();
+    void Die();
 }
