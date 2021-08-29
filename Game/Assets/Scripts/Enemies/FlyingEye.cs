@@ -56,6 +56,8 @@ public class FlyingEye : MonoBehaviour, IEnemy
         damage = 5;
 
         currentHealth = maxHealth;
+
+        material.SetFloat("_Fade", fade);
     }
 
     // Update is called once per frame
