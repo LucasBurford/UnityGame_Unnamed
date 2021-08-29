@@ -81,7 +81,7 @@ public class PlayerAttacks : MonoBehaviour
         iceSpeed = 25;
         windSpeed = 15;
 
-        meleeDamage = 30;
+        meleeDamage = 500;
 
         attackRange = 1;
     }
@@ -240,6 +240,11 @@ public class PlayerAttacks : MonoBehaviour
             if (hObject.tag == "Enemy")
             {
                 hObject.GetComponent<Enemy>().TakeDamage(meleeDamage);
+            }
+
+            if (hObject.tag == "Skeleton")
+            {
+                hObject.gameObject.GetComponent<Skeleton>().TakeDamage(meleeDamage);
             }
 
             if (hObject.tag == "BossKnight")

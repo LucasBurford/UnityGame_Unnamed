@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - BossKnight
   - PondFlower
+  - Skeleton
   layers:
   - Default
   - TransparentFX
