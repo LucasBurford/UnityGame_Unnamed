@@ -31,12 +31,16 @@ public class DialogueManager : MonoBehaviour
     public enum CharacterInConversationWith
     {
         none,
+        player,
         wizard,
         femaleWarrior
     }
     public static CharacterInConversationWith characterInConversationWith;
 
     // Conversation ended delegate/event
+    public delegate void DialogueEndedPlayer();
+    public static event DialogueEndedPlayer OnDialogueEndPlayer;
+
     public delegate void DialogueEndedWizard();
     public static event DialogueEndedWizard OnDialogueEndWizard;
 
@@ -133,6 +137,13 @@ public class DialogueManager : MonoBehaviour
         /// Handle which event to rasie
         switch (characterInConversationWith)
         {
+            case CharacterInConversationWith.player:
+                {
+                    // Raise OnDialogueEnd event for Player
+                    OnDialogueEndPlayer();
+                }
+                break;
+
             case CharacterInConversationWith.wizard:
                 {
                     if (characterInConversationWith == CharacterInConversationWith.wizard)

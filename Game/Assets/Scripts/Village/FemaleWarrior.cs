@@ -57,8 +57,12 @@ public class FemaleWarrior : MonoBehaviour
     private bool dialogue1HasTriggered;
 
     [SerializeField]
+    // Trigger dialogue "Check out the pond"
     private DialogueTrigger darkForestWaterDialogue;
 
+    [SerializeField]
+    // Trigger dialogue "This pond leads to the heart of the Dark Forest"
+    private DialogueTrigger pondDialogue;
     #endregion
     #endregion
 
@@ -69,6 +73,7 @@ public class FemaleWarrior : MonoBehaviour
 
         // Subscribe OnDialogueEnded
         DialogueManager.OnDialogueEndFemaleWarrior += OnDialogueEnd;
+        DialogueManager.OnDialogueEndPlayer += OnPlayerDialogueEnd;
 
         // Initialise values
         damage = 50;
@@ -169,6 +174,11 @@ public class FemaleWarrior : MonoBehaviour
         print("Dialogue with Ellie ended");
 
         state = CharacterState.following;
+    }
+
+    private void OnPlayerDialogueEnd()
+    {
+        pondDialogue.TriggerDialogue();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

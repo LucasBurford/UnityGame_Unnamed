@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private Material material;
 
     public GameManager gameManager;
+    public DialogueManager dialogueManager;
 
     public FireFlicker campfire;
 
@@ -24,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip audioWater;
     public AudioClip audioWood;
     public AudioClip audioStone;
+
+    public Sprite characterMugshot;
     #endregion
 
     #region Gameplay
@@ -46,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
 
     #region Dialogue
     [Header("Dialogue")]
+
+    public DialogueTrigger pondDialogue;
     #endregion
 
     #region Misc
@@ -208,6 +213,21 @@ public class PlayerMovement : MonoBehaviour
 
         material.SetColor("Color_3A09B3A0", new Color(0, 240, 255));
         material.SetFloat("_Fade", fade);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "PondDialogue")
+        {
+            // Set sprite
+            dialogueManager.characterMugshot.sprite = characterMugshot;
+
+            // Set enum in DialogueManager
+            DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.player;
+
+            // Trigger dialogue
+            pondDialogue.TriggerDialogue();
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
