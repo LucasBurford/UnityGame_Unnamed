@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Pathfinding;
@@ -102,7 +103,7 @@ public class FemaleWarrior : MonoBehaviour
         // Set destination to follow player
         gameObject.GetComponent<AIDestinationSetter>().target = FindObjectOfType<PlayerMovement>().gameObject.transform;
 
-        // Subscribe OnDialogueEnded
+        // Subscribe to events
         DialogueManager.OnDialogueEndFemaleWarrior += OnDialogueEnd;
         DialogueManager.OnDialogueEndPlayer += OnPlayerDialogueEnd;
 
@@ -163,11 +164,13 @@ public class FemaleWarrior : MonoBehaviour
 
     private void FollowPlayer()
     {
+        #region Workings
         // Follow player - allow to move
         ai.canMove = true;
 
         // Play running animation
         animator.SetFloat("MoveSpeed", moveSpeed);
+        #endregion
     }
 
     private void Attack()

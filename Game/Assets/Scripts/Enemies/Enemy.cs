@@ -5,6 +5,7 @@ using Pathfinding;
 
 public class Enemy : MonoBehaviour
 {
+    #region Members
     public GameManager gameManager;
 
     public float moveSpeed;
@@ -29,7 +30,7 @@ public class Enemy : MonoBehaviour
     private bool isDissolving;
 
     int rand;
-
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +41,7 @@ public class Enemy : MonoBehaviour
 
         moveSpeed = 5;
         health = 100;
-        damage = 10;
+        damage = 0;
 
         fade = 1;
         material.SetFloat("_Fade", fade);
@@ -116,7 +117,7 @@ public class Enemy : MonoBehaviour
         {
             isDead = true;
 
-            isDissolving = true;
+            //isDissolving = true;
 
             gameManager.GiveXP(25);
 
@@ -130,7 +131,7 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Start dissolve");
 
-        isDissolving = true;
+        //isDissolving = true;
     }
 
     private void Dissolve()
