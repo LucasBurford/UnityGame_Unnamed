@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1893448595, guid: a040fb66244a7f54289914d98ea4ef7d, type: 3}
+  m_Name: FemaleWarrior
+  m_EditorClassIdentifier: 
+  _data:
+    _json: '{"graph":{"variables":{"collection":{"$content":[],"$version":"A"},"$version":"A"},"controlInputDefinitions":[],"controlOutputDefinitions":[],"valueInputDefinitions":[],"valueOutputDefinitions":[],"title":"FemaleWarrior","summary":null,"pan":{"x":-3.182968,"y":-2084.228},"zoom":0.9,"elements":[{"coroutine":false,"defaultValues":{},"position":{"x":-438.0,"y":-380.0},"guid":"df286c9a-3adf-4eae-857b-b1782b456363","$version":"A","$type":"Bolt.Start"},{"coroutine":false,"defaultValues":{},"position":{"x":-450.0,"y":-259.0},"guid":"991f675b-595f-4893-8c85-4c6a4d6ad35c","$version":"A","$type":"Bolt.Update"},{"coroutine":false,"defaultValues":{"target":{"$content":0,"$type":"UnityEngine.Object"}},"position":{"x":-216.0,"y":-322.0},"guid":"ed97b611-566b-46df-95ea-b85de98e93cc","$version":"A","$type":"Bolt.OnTriggerEnter2D"}],"$version":"A"}}'
+    _objectReferences:
+    - {fileID: 1434384585993577302, guid: 05adaee2e32536b4a885b14a32b49c2e, type: 3}
