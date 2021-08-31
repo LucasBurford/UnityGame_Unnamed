@@ -14,6 +14,8 @@ public class Wizard : MonoBehaviour
 
     public ItemAcquired itemAcquired;
 
+    public Sprite characterMugshot;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +46,8 @@ public class Wizard : MonoBehaviour
                 dialogue1HasTriggered = true;
 
                 DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.wizard;
+
+                dialogueManager.characterMugshot.sprite = characterMugshot;
 
                 dialogueTrigger.TriggerDialogue();
 

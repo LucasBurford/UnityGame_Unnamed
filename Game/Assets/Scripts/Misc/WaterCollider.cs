@@ -8,7 +8,7 @@ public class WaterCollider : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag != "PondFlower")
+        if (collision.gameObject.tag == "Player")
         {
             // Set walking sound to water one
             playerMovement.surface = PlayerMovement.Surface.water;

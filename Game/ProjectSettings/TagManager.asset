@@ -11,6 +11,7 @@ TagManager:
   - PondFlower
   - Skeleton
   - FlyingEye
+  - DarkForestWaterDialogue
   layers:
   - Default
   - TransparentFX

@@ -21,6 +21,9 @@ public class DialogueManager : MonoBehaviour
     // References to dialogue text
     public TMP_Text nameText;
     public TMP_Text dialogueText;
+
+    // Character Mugshot
+    public Image characterMugshot;
     #endregion
 
     #region Dialogue Events

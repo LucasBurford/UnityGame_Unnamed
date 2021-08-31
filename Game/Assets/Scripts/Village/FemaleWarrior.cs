@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Pathfinding;
 
 public class FemaleWarrior : MonoBehaviour
@@ -18,6 +19,9 @@ public class FemaleWarrior : MonoBehaviour
 
     // Reference to AI pathing
     public AIPath ai;
+
+    // This character mugshot
+    public Sprite mugshot;
 
     #endregion
 
@@ -43,10 +47,18 @@ public class FemaleWarrior : MonoBehaviour
     // Character run speed
     [SerializeField]
     private float moveSpeed;
+    #endregion
+
+    #region Dialogue
+    [Header("Dialogue")]
 
     // Dialogue triggers
     [SerializeField]
     private bool dialogue1HasTriggered;
+
+    [SerializeField]
+    private DialogueTrigger darkForestWaterDialogue;
+
     #endregion
     #endregion
 
@@ -159,12 +171,26 @@ public class FemaleWarrior : MonoBehaviour
         state = CharacterState.following;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "DarkForestWaterDialogue")
+        {
+            // Set mugshot to this sprite
+            dialogueManager.characterMugshot.sprite = mugshot;
+
+            darkForestWaterDialogue.TriggerDialogue();
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == "Player_Knight" && !dialogue1HasTriggered)
         {
             // Prevent dialogue from happening again
             dialogue1HasTriggered = true;
+
+            // Set mugshot to this sprite
+            dialogueManager.characterMugshot.sprite = mugshot;
 
             // Set enum in DialogueManager
             DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.femaleWarrior;

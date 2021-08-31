@@ -6,15 +6,17 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     #region Members
+    #region References
+    [Header("References")]
+
     private Material material;
 
     public GameManager gameManager;
 
     public FireFlicker campfire;
 
-    public float moveSpeed;
-
     public Rigidbody2D rb;
+
     public Camera cam;
 
     public AudioSource audioSource;
@@ -22,14 +24,16 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip audioWater;
     public AudioClip audioWood;
     public AudioClip audioStone;
+    #endregion
+
+    #region Gameplay
+    [Header("Gameplay")]
+    [SerializeField]
 
     Vector2 movement;
 
+    public float moveSpeed;
     public bool isRunning;
-
-    private bool isDissolving;
-    private bool isReverseDisolving;
-    public float fade;
 
     // Bool to determine if player can move
     private bool canMove;
@@ -38,6 +42,18 @@ public class PlayerMovement : MonoBehaviour
         get { return canMove; }
         set { canMove = value; }
     }
+    #endregion
+
+    #region Dialogue
+    [Header("Dialogue")]
+    #endregion
+
+    #region Misc
+    [Header("Misc")]
+
+    public bool isDissolving;
+    public bool isReverseDisolving;
+    public float fade;
 
     public enum Surface
     {
@@ -48,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public Surface surface;
+    #endregion
     #endregion
 
     private void Start()
