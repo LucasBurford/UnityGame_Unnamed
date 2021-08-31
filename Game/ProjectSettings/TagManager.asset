@@ -12,6 +12,7 @@ TagManager:
   - Skeleton
   - FlyingEye
   - DarkForestWaterDialogue
+  - AIAttackEnemy
   layers:
   - Default
   - TransparentFX

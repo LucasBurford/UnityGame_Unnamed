@@ -116,6 +116,8 @@ public class Enemy : MonoBehaviour
         {
             isDead = true;
 
+            isDissolving = true;
+
             gameManager.GiveXP(25);
 
             FindObjectOfType<AudioManager>().Play("TrollDeath");

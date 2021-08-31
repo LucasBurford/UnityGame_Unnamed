@@ -301,7 +301,7 @@ public class FemaleWarrior : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         // If collision is with an enemy and has not yet attacked, or is between attacks
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "AIAttackEnemy")
         {
             if (!hasAttacked)
             {

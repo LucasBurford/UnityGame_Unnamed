@@ -274,7 +274,7 @@ public class PlayerAttacks : MonoBehaviour
         // Damage them
         foreach (Collider2D hObject in hitObjects)
         {
-            if (hObject.tag == "Enemy")
+            if (hObject.tag == "AIAttackEnemy")
             {
                 hObject.GetComponent<Enemy>().TakeDamage(meleeDamage);
             }
