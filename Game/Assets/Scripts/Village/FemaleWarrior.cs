@@ -55,6 +55,9 @@ public class FemaleWarrior : MonoBehaviour
         // Set destination to follow player
         gameObject.GetComponent<AIDestinationSetter>().target = FindObjectOfType<PlayerMovement>().gameObject.transform;
 
+        // Subscribe OnDialogueEnded
+        DialogueManager.OnDialogueEndFemaleWarrior += OnDialogueEnd;
+
         // Initialise values
         damage = 50;
         moveSpeed = 5;
@@ -149,12 +152,22 @@ public class FemaleWarrior : MonoBehaviour
         FindObjectOfType<AudioManager>().Play(name);
     }
 
+    private void OnDialogueEnd()
+    {
+        print("Dialogue with Ellie ended");
+
+        state = CharacterState.following;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.name == "Player_Knight" && !dialogue1HasTriggered)
         {
             // Prevent dialogue from happening again
             dialogue1HasTriggered = true;
+
+            // Set enum in DialogueManager
+            DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.femaleWarrior;
 
             // Trigger the dialogue
             dialogueTrigger.TriggerDialogue();

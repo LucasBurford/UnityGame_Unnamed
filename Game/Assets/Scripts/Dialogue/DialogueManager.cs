@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
+    #region Members
     // List of sentences
     private Queue<string> sentences;
 
@@ -19,11 +21,37 @@ public class DialogueManager : MonoBehaviour
     // References to dialogue text
     public TMP_Text nameText;
     public TMP_Text dialogueText;
+    #endregion
+
+    #region Dialogue Events
+    // Who is in converstaion enum - add to when needed
+    public enum CharacterInConversationWith
+    {
+        none,
+        wizard,
+        femaleWarrior
+    }
+    public static CharacterInConversationWith characterInConversationWith;
+
+    // Conversation ended delegate/event
+    public delegate void DialogueEndedWizard();
+    public static event DialogueEndedWizard OnDialogueEndWizard;
+
+    public delegate void DialogueEndedFemaleWarrior();
+    public static event DialogueEndedFemaleWarrior OnDialogueEndFemaleWarrior;
+    #endregion
 
     // Start is called before the first frame update
     void Start()
     {
         sentences = new Queue<string>();
+
+        characterInConversationWith = CharacterInConversationWith.none;
+    }
+
+    private void Update()
+    {
+
     }
 
     public void StartDialogue(Dialogue dialogue)
@@ -90,7 +118,40 @@ public class DialogueManager : MonoBehaviour
         // Set bool in Game Manager to false
         gameManager.isInDialogue = false;
 
+        // Handle which event to raise
+        CheckCharacterInConversationWith();
+
         // Return true when dialogue has ended
         return true;
+    }
+
+    private void CheckCharacterInConversationWith()
+    {
+        /// Handle which event to rasie
+        switch (characterInConversationWith)
+        {
+            case CharacterInConversationWith.wizard:
+                {
+                    if (characterInConversationWith == CharacterInConversationWith.wizard)
+                    {
+                        // Raise OnDialogueEnd event for Village Wizard
+                        OnDialogueEndWizard();
+                    }
+                }
+                break;
+
+            case CharacterInConversationWith.femaleWarrior:
+                {
+                    if (characterInConversationWith == CharacterInConversationWith.femaleWarrior)
+                    {
+                        // Raise OnDialogueEnd event for Female Warrior
+                        OnDialogueEndFemaleWarrior();
+                    }
+                }
+                break;
+        }
+
+        // After all is done, reset it back to none for simplicitie's sake
+        characterInConversationWith = CharacterInConversationWith.none;
     }
 }

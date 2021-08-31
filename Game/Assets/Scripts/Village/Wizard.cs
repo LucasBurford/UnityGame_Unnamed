@@ -17,24 +17,22 @@ public class Wizard : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        DialogueManager.OnDialogueEndWizard += OnDialogueEnded;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (dialogueManager.hasEnded && !gameManager.hasMap)
-        {
-            // Give player the map
-            gameManager.hasMap = true;
 
-            // Display to player
-            itemAcquired.DisplayItemText("Map", 5);
-        }
-        else
-        {
-            return;
-        }
+    }
+
+    private void OnDialogueEnded()
+    {
+        // Give player the map
+        gameManager.hasMap = true;
+
+        // Display to player
+        itemAcquired.DisplayItemText("Map", 5);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -44,6 +42,8 @@ public class Wizard : MonoBehaviour
             if (!dialogue1HasTriggered)
             {
                 dialogue1HasTriggered = true;
+
+                DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.wizard;
 
                 dialogueTrigger.TriggerDialogue();
 
