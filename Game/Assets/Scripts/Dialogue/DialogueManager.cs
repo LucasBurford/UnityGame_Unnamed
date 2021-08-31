@@ -90,6 +90,7 @@ public class DialogueManager : MonoBehaviour
         // Set bool in Game Manager to false
         gameManager.isInDialogue = false;
 
+        // Return true when dialogue has ended
         return true;
     }
 }
