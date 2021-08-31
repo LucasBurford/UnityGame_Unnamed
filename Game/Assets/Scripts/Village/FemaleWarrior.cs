@@ -37,7 +37,6 @@ public class FemaleWarrior : MonoBehaviour
         idle,
         following,
         inConversation,
-        inCombat
     }
 
     // Damage character will deal to enemies
@@ -47,6 +46,23 @@ public class FemaleWarrior : MonoBehaviour
     // Character run speed
     [SerializeField]
     private float moveSpeed;
+
+    // Attack point and range
+    [SerializeField]
+    private Transform attackPoint;
+
+    [SerializeField]
+    private float attackRange;
+
+    // Target layers
+    [SerializeField]
+    private LayerMask targetLayer;
+
+    // Prevent attack spam
+    [SerializeField]
+    private bool hasAttacked;
+
+    public bool isAttacking;
     #endregion
 
     #region Dialogue
@@ -72,6 +88,13 @@ public class FemaleWarrior : MonoBehaviour
     private bool darkForestEntryDialogueDone;
 
     #endregion
+
+    #region Misc
+    [Header("Misc")]
+
+    [SerializeField]
+    private bool hasPlayed;
+    #endregion
     #endregion
 
     private void Start()
@@ -87,6 +110,7 @@ public class FemaleWarrior : MonoBehaviour
         damage = 50;
         moveSpeed = 5;
         state = CharacterState.idle;
+        attackRange = 2;
 
         // Set AI move speed to moveSpeed
         ai.maxSpeed = moveSpeed;
@@ -119,13 +143,6 @@ public class FemaleWarrior : MonoBehaviour
                 }
                 break;
 
-            case CharacterState.inCombat:
-                {
-                    // Handle combat behaviour
-                    InCombat();
-                }
-                break;
-
             case CharacterState.inConversation:
                 {
                     // Handle conversation behaviour
@@ -153,9 +170,16 @@ public class FemaleWarrior : MonoBehaviour
         animator.SetFloat("MoveSpeed", moveSpeed);
     }
 
-    private void InCombat()
+    private void Attack()
     {
-        // TODO: Attack enemies, play animations, sounds etc
+        // Start animation
+        animator.SetBool("IsAttacking", true);
+
+        // Set hasAttacked to true
+        hasAttacked = true;
+
+        // Wait to actually cast attack to match animation
+        StartCoroutine(CastAttack(1));
     }
 
     private void InConversation()
@@ -179,8 +203,6 @@ public class FemaleWarrior : MonoBehaviour
 
     private void OnDialogueEnd()
     {
-        print("Dialogue with Ellie ended");
-
         state = CharacterState.following;
     }
 
@@ -202,6 +224,43 @@ public class FemaleWarrior : MonoBehaviour
 
         // Set enum in DialogueManager
         DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.femaleWarrior;
+    }
+
+    private void ResetAttack()
+    {
+        // Reset hasAttacked
+        hasAttacked = false;
+
+        //hasPlayed = false;
+    }
+
+    IEnumerator CastAttack(float seconds)
+    {
+        // Wait to match animation
+        yield return new WaitForSeconds(seconds);
+
+        // Cast circle and collect hit objects
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, targetLayer);
+
+        // Iterate through array and cause damage
+        foreach (Collider2D col in hitObjects)
+        {
+            print("We hit: " + col.gameObject.name);
+            col.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+        }
+
+        // Reset animation
+        animator.SetBool("IsAttacking", false);
+
+        // Wait to reset attack
+        StartCoroutine(WaitToResetAttack(2));
+    }
+
+    IEnumerator WaitToResetAttack(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+
+        ResetAttack();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -237,5 +296,34 @@ public class FemaleWarrior : MonoBehaviour
             // Play speaking audio
             PlaySound("WizardSpeaking");
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        // If collision is with an enemy and has not yet attacked, or is between attacks
+        if (collision.gameObject.tag == "Enemy")
+        {
+            if (!hasAttacked)
+            {
+                print("Attacking!");
+                Attack();
+
+                // Set hasAttacked to true to prevent attack spamming
+                hasAttacked = true;
+            }
+            else
+            {
+                print("Can't attack yet!");
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null)
+        {
+            return;
+        }
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }

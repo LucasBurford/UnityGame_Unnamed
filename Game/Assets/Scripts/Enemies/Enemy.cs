@@ -11,6 +11,9 @@ public class Enemy : MonoBehaviour
     public float health;
     public float damage;
 
+    [SerializeField]
+    private bool isDead;
+
     // Dissolve factor
     [SerializeField]
     private float fade;
@@ -109,11 +112,16 @@ public class Enemy : MonoBehaviour
 
     public void Die()
     {
-        gameManager.GiveXP(25);
+        if (!isDead)
+        {
+            isDead = true;
 
-        FindObjectOfType<AudioManager>().Play("TrollDeath");
+            gameManager.GiveXP(25);
 
-        StartCoroutine(Wait(2));
+            FindObjectOfType<AudioManager>().Play("TrollDeath");
+
+            StartCoroutine(Wait(2));
+        }
     }
 
     public void StartDissolve()

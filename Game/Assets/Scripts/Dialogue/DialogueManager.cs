@@ -117,8 +117,6 @@ public class DialogueManager : MonoBehaviour
 
     public bool EndDialogue()
     {
-        Debug.Log("End of convorsation");
-
         // Set animation to true
         animator.SetBool("IsOpen", false);
 
