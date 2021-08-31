@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Camera cam;
 
+    public GlobalLightMove sun;
+
     public AudioSource audioSource;
     public AudioClip audioGrass;
     public AudioClip audioWater;
@@ -215,18 +217,32 @@ public class PlayerMovement : MonoBehaviour
         material.SetFloat("_Fade", fade);
     }
 
+    private void ChangeDialogueSettings()
+    {
+        // Set sprite
+        dialogueManager.characterMugshot.sprite = characterMugshot;
+
+        // Set enum in DialogueManager
+        DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.player;
+
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.name == "PondDialogue")
         {
-            // Set sprite
-            dialogueManager.characterMugshot.sprite = characterMugshot;
-
-            // Set enum in DialogueManager
-            DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.player;
-
             // Trigger dialogue
+            ChangeDialogueSettings();
             pondDialogue.TriggerDialogue();
+        }
+
+        if (collision.gameObject.name == "DarkForestEntry")
+        {
+            // Set sun to follow player when they start travelling further away from start area
+            sun.shouldFollowPlayer = true;
+
+            // Maybe make it darker too
+            //sun.ChangeIntensity(0.3f);
         }
     }
 

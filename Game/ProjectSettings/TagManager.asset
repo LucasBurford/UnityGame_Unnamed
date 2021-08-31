@@ -70,6 +70,9 @@ TagManager:
   - name: Bushes
     uniqueID: 4275351615
     locked: 0
+  - name: TP_DarkForest
+    uniqueID: 4206328103
+    locked: 0
   - name: ActualPlayer
     uniqueID: 3820763415
     locked: 0

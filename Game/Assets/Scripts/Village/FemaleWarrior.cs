@@ -59,10 +59,18 @@ public class FemaleWarrior : MonoBehaviour
     [SerializeField]
     // Trigger dialogue "Check out the pond"
     private DialogueTrigger darkForestWaterDialogue;
+    private bool darkForestWaterDialogueDone;
 
     [SerializeField]
-    // Trigger dialogue "This pond leads to the heart of the Dark Forest"
+    // Trigger dialogue "This river leads to the heart of the Dark Forest"
     private DialogueTrigger pondDialogue;
+    private bool pondDialogueDone;
+
+    [SerializeField]
+    // Trigger dialogue "This is the entry to the Dark Forest
+    private DialogueTrigger darkForestEntryDialogue;
+    private bool darkForestEntryDialogueDone;
+
     #endregion
     #endregion
 
@@ -178,17 +186,39 @@ public class FemaleWarrior : MonoBehaviour
 
     private void OnPlayerDialogueEnd()
     {
-        pondDialogue.TriggerDialogue();
+        if (!pondDialogueDone)
+        {
+            // Start dialogue, then prevent it from happening again
+            ChangeDialogueSettings();
+            pondDialogue.TriggerDialogue();
+            pondDialogueDone = true;
+        }
+    }
+
+    private void ChangeDialogueSettings()
+    {
+        // Set mugshot to this sprite
+        dialogueManager.characterMugshot.sprite = mugshot;
+
+        // Set enum in DialogueManager
+        DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.femaleWarrior;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "DarkForestWaterDialogue")
+        if (collision.gameObject.name == "DarkForestWaterDialogue" && !darkForestWaterDialogueDone)
         {
-            // Set mugshot to this sprite
-            dialogueManager.characterMugshot.sprite = mugshot;
-
+            ChangeDialogueSettings();
             darkForestWaterDialogue.TriggerDialogue();
+            darkForestWaterDialogueDone = true;
+        }
+
+        if (collision.gameObject.name == "DarkForestEntry" && !darkForestEntryDialogueDone)
+        {
+            // Start dialogue and prevent from replaying
+            ChangeDialogueSettings();
+            darkForestEntryDialogue.TriggerDialogue();
+            darkForestEntryDialogueDone = true;
         }
     }
 
@@ -199,11 +229,7 @@ public class FemaleWarrior : MonoBehaviour
             // Prevent dialogue from happening again
             dialogue1HasTriggered = true;
 
-            // Set mugshot to this sprite
-            dialogueManager.characterMugshot.sprite = mugshot;
-
-            // Set enum in DialogueManager
-            DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.femaleWarrior;
+            ChangeDialogueSettings();
 
             // Trigger the dialogue
             dialogueTrigger.TriggerDialogue();
