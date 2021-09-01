@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 7729622579911627550}
   m_Layer: 0
   m_Name: DarkSkeleton
-  m_TagString: Skeleton
+  m_TagString: AIAttackEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,6 +180,7 @@ MonoBehaviour:
   damage: 0
   attackRange: 1.5
   canAttack: 0
+  isWalking: 0
   hasPlayed: 0
 --- !u!114 &4062286668697127332
 MonoBehaviour:

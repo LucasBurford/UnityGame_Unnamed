@@ -95,6 +95,9 @@ public class FemaleWarrior : MonoBehaviour
 
     [SerializeField]
     private bool hasPlayed;
+
+    [SerializeField]
+    private bool isTouchingPlayer;
     #endregion
     #endregion
 
@@ -124,6 +127,9 @@ public class FemaleWarrior : MonoBehaviour
 
         // Check move speed and face correct direction
         CheckDirection();
+
+        // Check for collisions with Player
+        CheckCollisions();
     }
 
     private void CheckState()
@@ -237,6 +243,19 @@ public class FemaleWarrior : MonoBehaviour
         //hasPlayed = false;
     }
 
+    private void CheckCollisions()
+    {
+        if (isTouchingPlayer)
+        {
+            // Prevent AI from pushing player
+            ai.maxSpeed = 0;
+        }
+        else
+        {
+            ai.maxSpeed = 5;
+        }
+    }
+
     IEnumerator CastAttack(float seconds)
     {
         // Wait to match animation
@@ -248,8 +267,15 @@ public class FemaleWarrior : MonoBehaviour
         // Iterate through array and cause damage
         foreach (Collider2D col in hitObjects)
         {
-            print("We hit: " + col.gameObject.name);
-            col.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            if (col.gameObject.tag == "AIAttackEnemy")
+            {
+                col.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            }
+
+            if (col.gameObject.tag == "DarkSkeleton")
+            {
+                col.gameObject.GetComponent<DarkSkeleton>().TakeDamage(damage);
+            }
         }
 
         // Reset animation
@@ -304,7 +330,7 @@ public class FemaleWarrior : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         // If collision is with an enemy and has not yet attacked, or is between attacks
-        if (collision.gameObject.tag == "AIAttackEnemy")
+        if (collision.gameObject.tag == "DarkSkeleton")
         {
             if (!hasAttacked)
             {
@@ -318,6 +344,23 @@ public class FemaleWarrior : MonoBehaviour
             {
                 print("Can't attack yet!");
             }
+        }
+
+        // If character is colliding with player
+        if (collision.gameObject.name == "Player_Knight")
+        {
+            // Set isTouchingPlayer to true
+            isTouchingPlayer = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // If character stops colliding with player i.e. player has manually moved away
+        if (collision.gameObject.name == "Player_Knight")
+        {
+            // Set isTouchingPlayer back to false
+            isTouchingPlayer = false;
         }
     }
 

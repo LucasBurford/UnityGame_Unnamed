@@ -294,6 +294,11 @@ public class PlayerAttacks : MonoBehaviour
                 hObject.GetComponent<BossKnight>().TakeDamage(meleeDamage);
             }
 
+            if (hObject.tag == "DarkSkeleton")
+            {
+                hObject.gameObject.GetComponent<DarkSkeleton>().TakeDamage(meleeDamage);
+            }
+
             FindObjectOfType<AudioManager>().Play("SwordHit");
         }
 
