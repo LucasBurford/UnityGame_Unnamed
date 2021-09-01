@@ -1,27 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
+/// <summary>
+/// Modified Skeleton class: adds pathfinding, higher health and damage
+/// </summary>
 public class DarkSkeleton : MonoBehaviour
 {
     #region References
+    [Header("References")]
+
     public GameManager gameManager;
+    public AIPath ai;
+    public AIDestinationSetter aiD;
     public Animator animator;
-
     public Transform attackPoint;
-
-    public Material material;
     #endregion
 
     #region Gameplay
+    [Header("Gameplay Values")]
+
     [SerializeField]
     private float maxHealth;
 
     [SerializeField]
     private float currentHealth;
-
-    [SerializeField]
-    private float attackRange;
 
     [SerializeField]
     private float maxDamage;
@@ -30,37 +34,49 @@ public class DarkSkeleton : MonoBehaviour
     private float damage;
 
     [SerializeField]
-    private float fade;
-
-    [SerializeField]
-    private float fadeFactor;
+    private float attackRange;
 
     [SerializeField]
     private bool canAttack;
 
     [SerializeField]
-    private bool isDissolving;
+    private bool isWalking;
 
-    public bool isBeingBlocked;
-
+    [SerializeField]
     private bool hasPlayed;
 
     #endregion
     // Start is called before the first frame update
     void Start()
     {
+        // Get components
+        GetComponents();
+
+        // Initialise values
+        InitialiseValues();
+    }
+
+    private void GetComponents()
+    {
+        // Get GameManager
         gameManager = FindObjectOfType<GameManager>();
 
-        maxHealth = 200;
-        currentHealth = maxHealth;
+        // Get AIPath & Destination Setter
+        ai = gameObject.GetComponent<AIPath>();
+        aiD = gameObject.GetComponent<AIDestinationSetter>();
+    }
 
-        fade = 1;
+    private void InitialiseValues()
+    {
+        // Get pathfinding target
+        aiD.target = FindObjectOfType<PlayerMovement>().transform;
+        ai.maxSpeed = 2.5f;
 
-        damage = maxDamage;
-
+        // Initialise values
         canAttack = true;
-
-        material.SetFloat("_Fade", fade);
+        maxHealth = 200;
+        currentHealth = 200;
+        damage = maxDamage;
     }
 
     // Update is called once per frame
@@ -71,18 +87,10 @@ public class DarkSkeleton : MonoBehaviour
             Die();
         }
 
-        if (isDissolving)
-        {
-            fade -= fadeFactor;
-
-            if (fade <= 0)
-            {
-                fade = 0;
-                isDissolving = false;
-            }
-
-            material.SetFloat("_Fade", fade);
-        }
+        // Check if Skeleton is walking
+        CheckSpeed();
+        // Change animation if necesary
+        ChangeMoveAnimation();
 
         if (Random.Range(0, 1000) < 5)
         {
@@ -92,6 +100,9 @@ public class DarkSkeleton : MonoBehaviour
 
     private void AttackPlayer()
     {
+        // Set AI move speed to 0 to prevent pushing
+        ai.maxSpeed = 0;
+
         // Get collided objects by casting a circle
         Collider2D[] objects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
 
@@ -131,6 +142,38 @@ public class DarkSkeleton : MonoBehaviour
         currentHealth -= damage;
     }
 
+    private void CheckSpeed()
+    {
+        if (ai.velocity.x >= 0.01f || ai.velocity.y >= 0.01f)
+        {
+            isWalking = true;
+        }
+        else if (ai.velocity.x <= -0.01f || ai.velocity.y <= -0.01f)
+        {
+            isWalking = true;
+        }
+        else if (ai.velocity.x == 0 || ai.velocity.y == 0)
+        {
+            isWalking = false;
+        }
+    }
+
+    private void ChangeMoveAnimation()
+    {
+        // If Skeleton is moving towards player
+        if (isWalking)
+        {
+            // Set walking animation to true
+            animator.SetFloat("MoveSpeed", 2.5f);
+        }
+        // If skeleton isn't moving at all
+        else if (!isWalking)
+        {
+            // Set walking animation to false
+            animator.SetFloat("MoveSpeed", 0);
+        }
+    }
+
     private void Die()
     {
         Debug.Log("Skeleton died");
@@ -144,9 +187,6 @@ public class DarkSkeleton : MonoBehaviour
         }
 
         hasPlayed = true;
-
-        // Play dissolve animation
-        isDissolving = true;
 
         // Wait for time to destroy object
         StartCoroutine(WaitToDestroy(3));
@@ -202,6 +242,9 @@ public class DarkSkeleton : MonoBehaviour
         yield return new WaitForSeconds(seconds);
 
         canAttack = true;
+
+        // Reset AI move speed
+        ai.maxSpeed = 2.5f;
     }
 
     IEnumerator WaitToDestroy(float seconds)
