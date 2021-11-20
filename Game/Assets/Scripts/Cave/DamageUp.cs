@@ -17,7 +17,7 @@ public class DamageUp : MonoBehaviour
         if (collision.gameObject.name == "Player_Knight")
         {
             // Double melee damage
-            playerAttacks.meleeDamage *= 2;
+            playerAttacks.MeleeDamage *= 2;
 
             FindObjectOfType<ItemAcquired>().DisplayItemText("Melee damage increaed!", 5);
 

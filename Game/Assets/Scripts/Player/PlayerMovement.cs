@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip audioWater;
     public AudioClip audioWood;
     public AudioClip audioStone;
+    public AudioClip audioDarkForestWood;
 
     public Sprite characterMugshot;
     #endregion
@@ -71,7 +72,8 @@ public class PlayerMovement : MonoBehaviour
         grass,
         water,
         wood,
-        stone
+        stone,
+        darkForestWood
     }
 
     public Surface surface;
@@ -166,6 +168,12 @@ public class PlayerMovement : MonoBehaviour
             case Surface.stone:
                 {
                     audioSource.clip = audioStone;
+                }
+                break;
+
+            case Surface.darkForestWood:
+                {
+                    audioSource.clip = audioDarkForestWood;
                 }
                 break;
         }

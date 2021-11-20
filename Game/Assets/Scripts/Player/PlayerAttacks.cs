@@ -76,6 +76,11 @@ public class PlayerAttacks : MonoBehaviour
     public float windSpeed;
     // MeleeAttack damage
     public float meleeDamage;
+    public float MeleeDamage
+    {
+        get { return meleeDamage; }
+        set { meleeDamage = value; }
+    }
     #endregion
 
     [SerializeField]
@@ -93,7 +98,7 @@ public class PlayerAttacks : MonoBehaviour
         iceSpeed = 25;
         windSpeed = 15;
 
-        meleeDamage = 500;
+        meleeDamage = 35;
 
         attackRange = 2;
     }
