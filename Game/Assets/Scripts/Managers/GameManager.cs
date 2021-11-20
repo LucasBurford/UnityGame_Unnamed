@@ -463,11 +463,14 @@ public class GameManager : MonoBehaviour
         // Play sound
         FindObjectOfType<AudioManager>().Play("PlayerDeath");
 
+        // Send player back to checkpoint location
+        player.SetPosition(checkpoint);
+
         // Start dissolve effect
-        player.StartDissolve();
+        //player.StartDissolve();
 
         // After player has dissolved, then do area death crossfade
-        StartCoroutine(WaitForDissolve(2));
+        //StartCoroutine(WaitForDissolve(2));
     }
 
     // Set respawn point for player
@@ -546,8 +549,7 @@ public class GameManager : MonoBehaviour
         // Trigger fade
         StartCoroutine(DeathCrossfade(2));
 
-        // Send player back to checkpoint location
-        player.SetPosition(checkpoint);
+
 
         // Freeze movement for a second
         StartCoroutine(player.StopPlayerMoving(2));

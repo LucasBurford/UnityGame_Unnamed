@@ -34,6 +34,7 @@ public class OctopusBoss : MonoBehaviour
         attackRange = 1.4f;
 
         ai.canMove = true;
+        canAttack = true;
     }
 
     // Update is called once per frame
@@ -53,6 +54,8 @@ public class OctopusBoss : MonoBehaviour
 
     public void Attack()
     {
+        print("Attack");
+
         // Set canAttack to false to prevent instant death
         canAttack = false;
 
@@ -101,8 +104,6 @@ public class OctopusBoss : MonoBehaviour
 
     private void CheckPositions()
     {
-        print(Vector2.Distance(playerMovement.transform.position, gameObject.transform.position));
-
         // Check that boss is close enough to attack player
         if (Vector2.Distance(gameObject.transform.position, playerMovement.transform.position) <= 5)
         {
