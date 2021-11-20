@@ -53,6 +53,10 @@ public class PlayerMovement : MonoBehaviour
     [Header("Dialogue")]
 
     public DialogueTrigger pondDialogue;
+
+    // Dark Forest Small Pond Dialogue
+    public DialogueTrigger smallPondDialogue;
+    public bool smallPondDialogueDone;
     #endregion
 
     #region Misc
@@ -243,6 +247,13 @@ public class PlayerMovement : MonoBehaviour
 
             // Maybe make it darker too
             //sun.ChangeIntensity(0.3f);
+        }
+
+        if (collision.gameObject.name == "SmallPondDialogue" && !smallPondDialogueDone)
+        {
+            smallPondDialogue.TriggerDialogue();
+            smallPondDialogueDone = true;
+            FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
         }
     }
 

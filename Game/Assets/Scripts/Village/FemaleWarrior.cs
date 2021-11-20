@@ -226,7 +226,7 @@ public class FemaleWarrior : MonoBehaviour
         }
     }
 
-    private void ChangeDialogueSettings()
+    public void ChangeDialogueSettings()
     {
         // Set mugshot to this sprite
         dialogueManager.characterMugshot.sprite = mugshot;
