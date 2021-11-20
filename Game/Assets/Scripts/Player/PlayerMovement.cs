@@ -57,7 +57,11 @@ public class PlayerMovement : MonoBehaviour
 
     // Dark Forest Small Pond Dialogue
     public DialogueTrigger smallPondDialogue;
-    public bool smallPondDialogueDone;
+    private bool smallPondDialogueDone;
+
+    // BoardWalk Dialogue
+    public DialogueTrigger boardWalkDialogue;
+    private bool boardWalkDialogueDone;
     #endregion
 
     #region Misc
@@ -262,6 +266,18 @@ public class PlayerMovement : MonoBehaviour
             smallPondDialogue.TriggerDialogue();
             smallPondDialogueDone = true;
             FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+        }
+
+        if (collision.gameObject.name == "BoardWalkDialogue" && !boardWalkDialogueDone)
+        {
+            boardWalkDialogue.TriggerDialogue();
+            boardWalkDialogueDone = true;
+            FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+        }
+
+        if (collision.gameObject.name == "LakeKillZone")
+        {
+            print("Drowned");
         }
     }
 
