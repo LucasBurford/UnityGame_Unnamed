@@ -6,11 +6,13 @@ using Pathfinding;
 public class Goblin : MonoBehaviour
 {
     #region Members
-    [Header("References")]
+    [Header("References and spec stuff")]
     public GameManager gameManager;
     public PlayerMovement playerMovement;
     public Animator animator;
     public AIPath ai;
+    public Transform attackPoint;
+    public float attackRange;
 
     [Header("Gameplay")]
     public States state;
@@ -23,6 +25,9 @@ public class Goblin : MonoBehaviour
 
     public float health;
     public float damageInflict;
+    public float attackDistance;
+
+    public bool canAttack;
 
     #endregion
     // Start is called before the first frame update
@@ -80,22 +85,51 @@ public class Goblin : MonoBehaviour
             case States.chasingPlayer:
                 {
                     animator.Play("GoblinRun");
+
+                    if (Vector2.Distance(gameObject.transform.position, playerMovement.transform.position) <= attackDistance)
+                    {
+                        state = States.attacking;
+
+                        if (canAttack)
+                        {
+                            Attack();
+                        }
+                        else
+                        {
+                            print("Goblin waits to attack");
+                        }
+                    }
                 }
                 break;
 
             case States.attacking:
                 {
-                    if (Random.Range(1, 2) == 1)
-                    {
-                        animator.Play("GoblinAttack1");
-                    }
-                    else if (Random.Range(1, 2) == 2)
-                    {
-                        animator.Play("GoblinAttack2");
-                    }
+                    animator.Play("GoblinAttack1");
                 }
                 break;
         }
+    }
+
+    public void Attack()
+    {
+        // Play attack sound 
+        FindObjectOfType<AudioManager>().Play("GoblinAttack");
+
+        // Cast circle and gather hitboxes
+        Collider2D[] hitBoxes = Physics2D.OverlapCircleAll(attackPoint.transform.position, attackRange);
+
+        // Iterate through array 
+        foreach(Collider2D col in hitBoxes)
+        {
+            if (col.gameObject.name == "Player_Knight")
+            {
+                gameManager.TakeDamage(damageInflict);
+            }
+        }
+
+        canAttack = false;
+
+        StartCoroutine(WaitToResetAttack());
     }
 
     public void TakeDamage(float amount)
@@ -112,5 +146,17 @@ public class Goblin : MonoBehaviour
         gameManager.GiveXP(50);
 
         Destroy(gameObject);
+    }
+
+    IEnumerator WaitToResetAttack()
+    {
+        yield return new WaitForSeconds(5);
+
+        canAttack = true;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
