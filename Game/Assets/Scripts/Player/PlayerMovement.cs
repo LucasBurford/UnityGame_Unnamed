@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public bool canDodge;
+    public float dodgeDistance;
     #endregion
 
     #region Dialogue
@@ -105,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject dissappearingBushes;
     public GameObject castle;
+    private bool windowTrigger;
     #endregion
     #endregion
 
@@ -116,7 +118,6 @@ public class PlayerMovement : MonoBehaviour
         fade = 1;
 
         canMove = true;
-        canDodge = true;
 
         surface = Surface.grass;
         moveSpeed = 5f;
@@ -177,8 +178,6 @@ public class PlayerMovement : MonoBehaviour
     // Handle Movement
     private void Movement()
     {
-        print(movement);
-
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
@@ -187,7 +186,7 @@ public class PlayerMovement : MonoBehaviour
         if (movement.x >= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
         {
             // Dodge right
-            transform.position = new Vector3(transform.position.x + 2, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x + dodgeDistance, transform.position.y, transform.position.z);
             FindObjectOfType<AudioManager>().Play("PlayerDodge");
             canDodge = false;
             StartCoroutine(WaitToResetDodge());
@@ -196,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
         else if (movement.x <= -0.1f && Input.GetKeyDown(KeyCode.Space) && canDodge)
         {
             // Dodge left
-            transform.position = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z);
+            transform.position = new Vector3(transform.position.x - dodgeDistance, transform.position.y, transform.position.z);
             FindObjectOfType<AudioManager>().Play("PlayerDodge");
             canDodge = false;
             StartCoroutine(WaitToResetDodge());
@@ -206,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
         else if (movement.y >= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
         {
             // Dodge up
-            transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y + dodgeDistance, transform.position.z);
             FindObjectOfType<AudioManager>().Play("PlayerDodge");
             canDodge = false;
             StartCoroutine(WaitToResetDodge());
@@ -215,7 +214,7 @@ public class PlayerMovement : MonoBehaviour
         else if (movement.y <= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
         {
             // Dodge down
-            transform.position = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
+            transform.position = new Vector3(transform.position.x, transform.position.y - dodgeDistance, transform.position.z);
             FindObjectOfType<AudioManager>().Play("PlayerDodge");
             canDodge = false;
             StartCoroutine(WaitToResetDodge());
@@ -397,8 +396,10 @@ public class PlayerMovement : MonoBehaviour
         }
         #endregion
 
-        if (collision.gameObject.name == "WindowRoomEntrance")
+        if (collision.gameObject.name == "WindowRoomEntrance" && !windowTrigger)
         {
+            windowTrigger = true;
+
             // Pull camera back
             camBacking = true;
 

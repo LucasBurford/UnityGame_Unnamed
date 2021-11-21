@@ -309,6 +309,11 @@ public class PlayerAttacks : MonoBehaviour
                 hObject.gameObject.GetComponent<OctopusBoss>().TakeDamage(meleeDamage);
             }
 
+            if (hObject.gameObject.name == "Goblin")
+            {
+                hObject.gameObject.GetComponent<Goblin>().TakeDamage(meleeDamage);
+            }
+
             FindObjectOfType<AudioManager>().Play("SwordHit");
         }
 
