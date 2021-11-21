@@ -62,6 +62,14 @@ public class PlayerMovement : MonoBehaviour
     // BoardWalk Dialogue
     public DialogueTrigger boardWalkDialogue;
     private bool boardWalkDialogueDone;
+
+    // Return to Wizard dialogue
+    public DialogueTrigger returnToWizardDialogue;
+    private bool returnToWizardDialogueDone;
+
+    // Talk to Wizard dialogue - nothing
+    public DialogueTrigger idleWizardDialogue;
+
     #endregion
 
     #region Misc
@@ -273,6 +281,16 @@ public class PlayerMovement : MonoBehaviour
             boardWalkDialogue.TriggerDialogue();
             boardWalkDialogueDone = true;
             FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+        }
+
+        if (collision.gameObject.name == "ReturnToWizardDialogue" && FindObjectOfType<EnemyTracker>().octopusBossIsDead &&!returnToWizardDialogueDone)
+        {
+            returnToWizardDialogue.TriggerDialogue();
+            returnToWizardDialogueDone = true;
+        }
+        else if (collision.gameObject.name == "ReturnToWizardDialogue")
+        {
+            idleWizardDialogue.TriggerDialogue();
         }
 
         if (collision.gameObject.name == "LakeKillZone")

@@ -10,6 +10,9 @@ public class OctopusBoss : MonoBehaviour
     public AIPath ai;
     public PlayerMovement playerMovement;
     public GameManager gameManager;
+    public Material material;
+    public bool isDisolving;
+    public float fade;
 
     public Transform attackPoint;
     public float attackRange;
@@ -18,6 +21,7 @@ public class OctopusBoss : MonoBehaviour
     public bool activated;
     public bool chasing;
     public bool canAttack;
+    public bool canPoison;
 
     [Header("Health and damage")]
     public float health;
@@ -30,11 +34,13 @@ public class OctopusBoss : MonoBehaviour
     void Start()
     {
         health = 500;
-        damageInflict = 40;
+        damageInflict = 1;
         attackRange = 1.4f;
+        material.SetFloat("_Fade", 1);
 
         ai.canMove = true;
         canAttack = true;
+        canPoison = true;
     }
 
     // Update is called once per frame
@@ -50,13 +56,20 @@ public class OctopusBoss : MonoBehaviour
         CheckPositions();
 
         CheckRotation();
+
+        if (isDisolving)
+        {
+            fade -= 0.01f;
+
+            material.SetFloat("_Fade", fade);
+        }
     }
 
     public void Attack()
     {
         print("Attack");
 
-        // Set canAttack to false to prevent instant death
+        // Set canAttack to false to prevent attack spam
         canAttack = false;
 
         // Cast a circle to gather hitboxes
@@ -70,16 +83,30 @@ public class OctopusBoss : MonoBehaviour
             {
                 // Take damage
                 gameManager.TakeDamage(damageInflict);
+
+                // Only poison player once every 5 seconds to prevent spam
+                if (canPoison)
+                {
+                    gameManager.isPoisoned = true;
+                    canPoison = false;
+
+                    StartCoroutine(WaitToResetPoison());
+                }
             }
         }
 
-        // Wait to attack again to prevent instant death
+        // Wait to attack again to prevent attack spam
         StartCoroutine(WaitToResetAttack());
     }
 
     public void TakeDamage(float amount)
     {
         health -= amount;
+
+        if (health <= 0)
+        {
+            Die();
+        }
     }
 
     public void Heal()
@@ -92,6 +119,22 @@ public class OctopusBoss : MonoBehaviour
         ai.maxSpeed = 1;
 
         StartCoroutine(WaitToResetMoveSpeed());
+    }
+
+    public void Die()
+    {
+        //isDisolving = true;
+
+        FindObjectOfType<AudioManager>().Play("OctopusBossScream");
+
+        FindObjectOfType<EnemyTracker>().octopusBossIsDead = true;
+
+        gameManager.GiveXP(200);
+
+        Destroy(gameObject);
+
+        // Wait to destroy object
+       // StartCoroutine(WaitToDestroyObject());
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -156,11 +199,25 @@ public class OctopusBoss : MonoBehaviour
         canAttack = true;
     }
 
+    IEnumerator WaitToResetPoison()
+    {
+        yield return new WaitForSeconds(5);
+
+        canPoison = true;
+    }
+
     IEnumerator WaitToStartEllieLine()
     {
         yield return new WaitForSeconds(4);
 
         // Play voice line
+    }
+
+    IEnumerator WaitToDestroyObject()
+    {
+        yield return new WaitForSeconds(6);
+
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmosSelected()

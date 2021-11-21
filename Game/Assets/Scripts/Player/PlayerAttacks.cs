@@ -98,7 +98,7 @@ public class PlayerAttacks : MonoBehaviour
         iceSpeed = 25;
         windSpeed = 15;
 
-        meleeDamage = 35;
+        meleeDamage = 500;
 
         attackRange = 2;
     }
@@ -302,6 +302,11 @@ public class PlayerAttacks : MonoBehaviour
             if (hObject.tag == "DarkSkeleton")
             {
                 hObject.gameObject.GetComponent<DarkSkeleton>().TakeDamage(meleeDamage);
+            }
+
+            if (hObject.gameObject.name == "OctopusBoss")
+            {
+                hObject.gameObject.GetComponent<OctopusBoss>().TakeDamage(meleeDamage);
             }
 
             FindObjectOfType<AudioManager>().Play("SwordHit");

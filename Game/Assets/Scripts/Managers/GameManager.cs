@@ -100,6 +100,10 @@ public class GameManager : MonoBehaviour
     // Bool to determine if player is blocking so we can decide if they should take damage
     public bool isBlocking;
 
+    // Bool to determine if player is poisoned
+    public bool isPoisoned;
+    public bool poisonHasStarted;
+
     // Reference to EnemySpawner
     public EnemySpawner enemySpawner;
     #endregion
@@ -124,6 +128,9 @@ public class GameManager : MonoBehaviour
 
     // Cause of death text
     public TMP_Text causeOfDeathText;
+
+    // Status text
+    public TMP_Text statusText;
 
     // Get KnightBoss
     public GameObject bossKnight;
@@ -158,6 +165,7 @@ public class GameManager : MonoBehaviour
         CheckMouseInput();
         CheckKeyboardInput();
         CheckTime();
+        CheckPoisoned();
 
         if (!proceedToVillageText.IsDestroyed())
         {
@@ -217,6 +225,7 @@ public class GameManager : MonoBehaviour
             Die("Misadventure");
         }
     }
+
     // Check amount of XP player has and level up if need to 
     private void CheckXPAmount()
     {
@@ -435,7 +444,7 @@ public class GameManager : MonoBehaviour
 
     private void UpdateUIElements()
     {
-        healthText.text = currentHealth + "/" + maxHealth;
+        healthText.text = currentHealth.ToString("F0") + "/" + maxHealth;
         currentLevelText.text = playerLevel.ToString();
         collectedPlantsText.text = collectedHealingPlants.ToString();
         healthBar.SetSlider(currentHealth);
@@ -479,6 +488,32 @@ public class GameManager : MonoBehaviour
         Debug.Log("Checkpoint set at: " + pCheckpoint);
         checkpoint = pCheckpoint;
     }
+
+    public void CheckPoisoned()
+    {
+        // If player is poisoned
+        if (isPoisoned)
+        {
+            // Set poisonHasStarted to true
+            poisonHasStarted = true;
+
+            // Reduce health slowly until it wears off
+            currentHealth -= 0.1f;
+
+            // Show status text
+            statusText.gameObject.SetActive(true);
+
+            // Start timer to remove poison
+            if (poisonHasStarted)
+            {
+                StartCoroutine(WaitToRemovePoison());
+            }
+        }
+        else
+        {
+            statusText.gameObject.SetActive(false);
+        }
+    }
     #endregion
 
     #region Coroutines
@@ -498,6 +533,15 @@ public class GameManager : MonoBehaviour
 
         // Start time increasing 
         shouldIncrease = true;
+    }
+
+    IEnumerator WaitToRemovePoison()
+    {
+        poisonHasStarted = false;
+
+        yield return new WaitForSeconds(3);
+
+        isPoisoned = false;
     }
 
     public IEnumerator AreaCrossfade(float seconds)
