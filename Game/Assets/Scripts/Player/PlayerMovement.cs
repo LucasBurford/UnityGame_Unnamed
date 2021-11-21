@@ -67,6 +67,10 @@ public class PlayerMovement : MonoBehaviour
     public DialogueTrigger returnToWizardDialogue;
     private bool returnToWizardDialogueDone;
 
+    // Go to explore castle dialogue
+    public DialogueTrigger goToExploreCastleDialogue;
+    private bool goToExploreCastleDialogueDone;
+
     // Talk to Wizard dialogue - nothing
     public DialogueTrigger idleWizardDialogue;
 
@@ -291,6 +295,13 @@ public class PlayerMovement : MonoBehaviour
         else if (collision.gameObject.name == "ReturnToWizardDialogue")
         {
             idleWizardDialogue.TriggerDialogue();
+        }
+
+        if (collision.gameObject.name == "GoExploreCastleDialogue" && FindObjectOfType<EnemyTracker>().octopusBossIsDead && !goToExploreCastleDialogueDone)
+        {
+            FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+            goToExploreCastleDialogue.TriggerDialogue();
+            goToExploreCastleDialogueDone = true;
         }
 
         if (collision.gameObject.name == "LakeKillZone")

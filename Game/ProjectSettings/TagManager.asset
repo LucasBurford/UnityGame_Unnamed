@@ -75,12 +75,15 @@ TagManager:
   - name: TP_DarkForest
     uniqueID: 4206328103
     locked: 0
-  - name: ActualPlayer
-    uniqueID: 3820763415
-    locked: 0
   - name: Scenery
     uniqueID: 3590223143
     locked: 0
   - name: DialogueUI
     uniqueID: 210051621
+    locked: 0
+  - name: Castle
+    uniqueID: 405322411
+    locked: 0
+  - name: ActualPlayer
+    uniqueID: 3820763415
     locked: 0

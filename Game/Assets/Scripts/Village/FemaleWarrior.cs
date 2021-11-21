@@ -126,7 +126,7 @@ public class FemaleWarrior : MonoBehaviour
         CheckState();
 
         // Check move speed and face correct direction
-        CheckDirection();
+        CheckRotation();
 
         // Check for collisions with Player
         CheckCollisions();
@@ -165,7 +165,7 @@ public class FemaleWarrior : MonoBehaviour
         ai.canMove = false;
 
         // Play idle animation
-        animator.SetFloat("MoveSpeed", 0);
+        animator.SetBool("Idle", true);
     }
 
     private void FollowPlayer()
@@ -174,8 +174,12 @@ public class FemaleWarrior : MonoBehaviour
         // Follow player - allow to move
         ai.canMove = true;
 
-        // Play running animation
-        animator.SetFloat("MoveSpeed", moveSpeed);
+        if (ai.desiredVelocity.x >= 0.01f || ai.desiredVelocity.x <= 0.01f || ai.desiredVelocity.y >= 0.01f || ai.desiredVelocity.y <= 0.01f)
+        {
+            // Play running animation
+            animator.SetFloat("MoveSpeed", moveSpeed);
+        }
+
         #endregion
     }
 
@@ -200,10 +204,18 @@ public class FemaleWarrior : MonoBehaviour
         animator.SetFloat("MoveSpeed", 0);
     }
 
-    private void CheckDirection()
+    private void CheckRotation()
     {
-
+        if (ai.desiredVelocity.x >= 0.01f)
+        {
+            transform.localScale = new Vector3(8f, 8f, 8f);
+        }
+        else if (ai.desiredVelocity.x <= 0.01f)
+        {
+            transform.localScale = new Vector3(-8f, 8f, 8f);
+        }
     }
+
 
     private void PlaySound(string name)
     {
