@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class CastleManager : MonoBehaviour
 {
+    #region Members
+    [Header("References")]
+    public GameObject entranceSkeleton;
+
+
+    #endregion
     // Start is called before the first frame update
     void Start()
     {

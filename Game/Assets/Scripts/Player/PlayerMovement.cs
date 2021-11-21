@@ -74,6 +74,10 @@ public class PlayerMovement : MonoBehaviour
     // Talk to Wizard dialogue - nothing
     public DialogueTrigger idleWizardDialogue;
 
+    // Castle entrance dialogue
+    public DialogueTrigger castleEntranceDialogue;
+    private bool castleEntranceDialogueDone;
+
     #endregion
 
     #region Misc
@@ -93,6 +97,8 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public Surface surface;
+
+    public GameObject dissappearingBushes;
     #endregion
     #endregion
 
@@ -257,6 +263,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        #region Dialogues
         if (collision.gameObject.name == "PondDialogue")
         {
             // Trigger dialogue
@@ -300,9 +307,19 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.name == "GoExploreCastleDialogue" && FindObjectOfType<EnemyTracker>().octopusBossIsDead && !goToExploreCastleDialogueDone)
         {
             FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+            dissappearingBushes.SetActive(false);
             goToExploreCastleDialogue.TriggerDialogue();
             goToExploreCastleDialogueDone = true;
         }
+
+        if (collision.gameObject.name == "CastleEntranceDialogue" && !castleEntranceDialogueDone)
+        {
+            castleEntranceDialogue.TriggerDialogue();
+            FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
+            FindObjectOfType<CastleManager>().entranceSkeleton.SetActive(true);
+            castleEntranceDialogueDone = true;
+        }
+        #endregion
 
         if (collision.gameObject.name == "LakeKillZone")
         {
