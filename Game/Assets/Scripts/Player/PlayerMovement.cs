@@ -87,6 +87,9 @@ public class PlayerMovement : MonoBehaviour
     public bool isReverseDisolving;
     public float fade;
 
+    public bool camBacking;
+    public bool camReversing;
+
     public enum Surface
     {
         grass,
@@ -99,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
     public Surface surface;
 
     public GameObject dissappearingBushes;
+    public GameObject castle;
     #endregion
     #endregion
 
@@ -141,8 +145,32 @@ public class PlayerMovement : MonoBehaviour
 
         SurfaceAudio();
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+
+        #region Cam backing and reversing
+        if (camBacking)
+        {
+            cam.orthographicSize += 0.03f;
+            
+            if (cam.orthographicSize >= 14)
+            {
+                camBacking = false;
+                StartCoroutine(WaitToReverseCamera());
+            }
+        }
+        if (camReversing)
+        {
+            cam.orthographicSize -= 0.03f;
+
+            if (cam.orthographicSize <= 7.5f)
+            {
+                cam.orthographicSize = 7.5f;
+                camReversing = false;
+            }
+        }
+        #endregion
     }
 
+    #region Gameplay Methods
     // Handle Movement
     private void Movement()
     {
@@ -260,7 +288,9 @@ public class PlayerMovement : MonoBehaviour
         DialogueManager.characterInConversationWith = DialogueManager.CharacterInConversationWith.player;
 
     }
+    #endregion
 
+    #region Unity Methods
     private void OnTriggerEnter2D(Collider2D collision)
     {
         #region Dialogues
@@ -308,6 +338,7 @@ public class PlayerMovement : MonoBehaviour
         {
             FindObjectOfType<FemaleWarrior>().ChangeDialogueSettings();
             dissappearingBushes.SetActive(false);
+            castle.SetActive(true);
             goToExploreCastleDialogue.TriggerDialogue();
             goToExploreCastleDialogueDone = true;
         }
@@ -320,6 +351,15 @@ public class PlayerMovement : MonoBehaviour
             castleEntranceDialogueDone = true;
         }
         #endregion
+
+        if (collision.gameObject.name == "WindowRoomEntrance")
+        {
+            // Pull camera back
+            camBacking = true;
+
+            // Play sound
+            FindObjectOfType<AudioManager>().Play("WindowRoomEcho");
+        }
 
         if (collision.gameObject.name == "LakeKillZone")
         {
@@ -337,6 +377,15 @@ public class PlayerMovement : MonoBehaviour
             campfire.energy -= 0.030f;
         }
     }
+    #endregion
+
+    #region Coroutines
+    IEnumerator WaitToReverseCamera()
+    {
+        yield return new WaitForSeconds(4);
+
+        camReversing = true;
+    }
 
     // Stop player moving
     public IEnumerator StopPlayerMoving(float seconds)
@@ -347,4 +396,5 @@ public class PlayerMovement : MonoBehaviour
 
         canMove = true;
     }
+    #endregion
 }
