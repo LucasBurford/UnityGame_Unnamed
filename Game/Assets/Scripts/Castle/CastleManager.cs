@@ -13,6 +13,14 @@ public class CastleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        PlayRandomSound();
+    }
+
+    public void PlayRandomSound()
+    {
+        if (Random.Range(0, 1000) == 100)
+        {
+            FindObjectOfType<AudioManager>().Play("CastleMetalCreak");
+        }
     }
 }
