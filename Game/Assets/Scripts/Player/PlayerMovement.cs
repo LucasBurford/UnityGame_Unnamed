@@ -48,6 +48,8 @@ public class PlayerMovement : MonoBehaviour
         get { return canMove; }
         set { canMove = value; }
     }
+
+    public bool canDodge;
     #endregion
 
     #region Dialogue
@@ -114,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
         fade = 1;
 
         canMove = true;
+        canDodge = true;
 
         surface = Surface.grass;
         moveSpeed = 5f;
@@ -174,8 +177,50 @@ public class PlayerMovement : MonoBehaviour
     // Handle Movement
     private void Movement()
     {
+        print(movement);
+
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
+
+        #region Dodge
+        // If moving right and presses space
+        if (movement.x >= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
+        {
+            // Dodge right
+            transform.position = new Vector3(transform.position.x + 2, transform.position.y, transform.position.z);
+            FindObjectOfType<AudioManager>().Play("PlayerDodge");
+            canDodge = false;
+            StartCoroutine(WaitToResetDodge());
+        }
+        // If moving left and presses space
+        else if (movement.x <= -0.1f && Input.GetKeyDown(KeyCode.Space) && canDodge)
+        {
+            // Dodge left
+            transform.position = new Vector3(transform.position.x - 2, transform.position.y, transform.position.z);
+            FindObjectOfType<AudioManager>().Play("PlayerDodge");
+            canDodge = false;
+            StartCoroutine(WaitToResetDodge());
+        }
+
+        // If moving up and presses space
+        else if (movement.y >= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
+        {
+            // Dodge up
+            transform.position = new Vector3(transform.position.x, transform.position.y + 2, transform.position.z);
+            FindObjectOfType<AudioManager>().Play("PlayerDodge");
+            canDodge = false;
+            StartCoroutine(WaitToResetDodge());
+        }
+        // If moving down and presses space
+        else if (movement.y <= 0.01f && Input.GetKeyDown(KeyCode.Space) && canDodge)
+        {
+            // Dodge down
+            transform.position = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
+            FindObjectOfType<AudioManager>().Play("PlayerDodge");
+            canDodge = false;
+            StartCoroutine(WaitToResetDodge());
+        }
+        #endregion
 
         if (movement.x > 0 || movement.x < 0 || movement.y > 0 || movement.y < 0)
         {
@@ -380,6 +425,14 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region Coroutines
+
+    IEnumerator WaitToResetDodge()
+    {
+        yield return new WaitForSeconds(2);
+
+        canDodge = true;
+    }
+
     IEnumerator WaitToReverseCamera()
     {
         yield return new WaitForSeconds(4);
