@@ -21,7 +21,13 @@ public class RedKnight : MonoBehaviour
     public Transform detectEnemies;
     public float detectEnemiesRange;
 
-    public Collider2D[] hitObjects;
+    public Transform attackPoint;
+    public float attackRange;
+
+    public Collider2D[] detectedObjects;
+    public bool hasTarget;
+
+    public bool canAttack;
 
     #endregion
     // Start is called before the first frame update
@@ -30,6 +36,7 @@ public class RedKnight : MonoBehaviour
         health = 300;
         damageInflict = 40;
         detectEnemiesRange = 4;
+        attackRange = 2.5f;
         ai.canMove = false;
     }
 
@@ -38,7 +45,11 @@ public class RedKnight : MonoBehaviour
     {
         CheckState();
         CheckRotation();
-        DetectEnemies();
+
+        if (!hasTarget)
+        {
+            DetectEnemies();
+        }
 
         distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
 
@@ -48,41 +59,55 @@ public class RedKnight : MonoBehaviour
     public void DetectEnemies()
     {
         // Gather hitboxes
-        hitObjects = Physics2D.OverlapCircleAll(detectEnemies.position, detectEnemiesRange);
+        detectedObjects = Physics2D.OverlapCircleAll(detectEnemies.position, detectEnemiesRange);
 
         // Loop through array and see if any enemies are detected
-        foreach (Collider2D col in hitObjects)
+        foreach (Collider2D col in detectedObjects)
         {
             // If detect enemies circle gathers enemy tags
             if (col.gameObject.tag == "Enemy")
             {
-                // Get position of detected enemy
-                Vector2 enemyPos = col.gameObject.transform.position;
-
                 // Set ai's destination to that pos
                 aiSetter.target = col.gameObject.transform;
 
-                // Allow ai to move
-                ai.canMove = true;
+                // When ai reaches target, cast attack
+                if (ai.reachedDestination)
+                {
+                    if (canAttack)
+                    {
+                        Attack();
+                    }
+                }
             }
         }
     }
 
-    public void CheckState()
+    public void Attack()
     {
-        // If player is within following distance
-        if (distanceToPlayer <= 6)
+        hasTarget = true;
+
+        // Gather hitboxes of enemy
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
+
+        // Loop through array 
+        foreach(Collider2D col in hitObjects)
         {
-            ai.canMove = true;
-            PlayAnimation("KnightWalk");
-        }
-        else if (distanceToPlayer >= 7)
-        {
-            ai.canMove = false;
-            PlayAnimation("KnightIdle");
+            if (col.gameObject.name == "Goblin")
+            {
+                col.gameObject.GetComponent<Goblin>().TakeDamage(damageInflict);
+            }
         }
 
-        if (ai.reachedDestination)
+        PlayAnimation("KnightAttack");
+    }
+
+    public void CheckState()
+    {
+        if (ai.canMove)
+        {
+            PlayAnimation("KnightWalk");
+        }
+        else
         {
             PlayAnimation("KnightIdle");
         }
@@ -112,5 +137,6 @@ public class RedKnight : MonoBehaviour
             return;
         }
         Gizmos.DrawWireSphere(detectEnemies.position, detectEnemiesRange);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
