@@ -52,6 +52,15 @@ public class RedKnight : MonoBehaviour
 
         DetectEnemies();
 
+        if (ai.reachedDestination)
+        {
+            ai.canMove = false;
+        }
+        else
+        {
+            ai.canMove = true;
+        }
+
         distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
     }
 
@@ -102,6 +111,15 @@ public class RedKnight : MonoBehaviour
             if (col.gameObject.name == "Goblin")
             {
                 col.gameObject.GetComponent<Goblin>().TakeDamage(damageInflict);
+
+
+                if (col.gameObject.GetComponent<Goblin>().health <= 0)
+                {
+                    aiSetter.target = player.transform;
+                    ai.canMove = true;
+                    hasTarget = false;
+                    attacking = false;
+                }
             }
         }
 
@@ -129,10 +147,6 @@ public class RedKnight : MonoBehaviour
         else if (!moving && !attacking)
         {
             PlayAnimation("KnightIdle");
-        }
-        else if (!moving && attacking)
-        {
-            PlayAnimation("KnightAttack");
         }
     }
 
