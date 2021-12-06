@@ -11,12 +11,16 @@ public class RedKnight : MonoBehaviour
     public AIDestinationSetter aiSetter;
     public Animator animator;
     public PlayerMovement player;
+    public LayerMask enemyLayers;
 
     [Header("Gameplay and spec")]
     public float health;
     public float damageInflict;
     public float distanceToMove;
     public float distanceToPlayer;
+
+    public bool moving;
+    public bool attacking;
 
     public Transform detectEnemies;
     public float detectEnemiesRange;
@@ -37,7 +41,7 @@ public class RedKnight : MonoBehaviour
         damageInflict = 40;
         detectEnemiesRange = 4;
         attackRange = 2.5f;
-        ai.canMove = false;
+        canAttack = true;
     }
 
     // Update is called once per frame
@@ -46,20 +50,15 @@ public class RedKnight : MonoBehaviour
         CheckState();
         CheckRotation();
 
-        if (!hasTarget)
-        {
-            DetectEnemies();
-        }
+        DetectEnemies();
 
         distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
-
-        print(aiSetter.target);
     }
 
     public void DetectEnemies()
     {
         // Gather hitboxes
-        detectedObjects = Physics2D.OverlapCircleAll(detectEnemies.position, detectEnemiesRange);
+        detectedObjects = Physics2D.OverlapCircleAll(detectEnemies.position, detectEnemiesRange, enemyLayers);
 
         // Loop through array and see if any enemies are detected
         foreach (Collider2D col in detectedObjects)
@@ -67,6 +66,8 @@ public class RedKnight : MonoBehaviour
             // If detect enemies circle gathers enemy tags
             if (col.gameObject.tag == "Enemy")
             {
+                ai.canMove = true;
+
                 // Set ai's destination to that pos
                 aiSetter.target = col.gameObject.transform;
 
@@ -77,6 +78,10 @@ public class RedKnight : MonoBehaviour
                     {
                         Attack();
                     }
+                    else
+                    {
+                        print("Red Knight waits to attack");
+                    }
                 }
             }
         }
@@ -84,10 +89,12 @@ public class RedKnight : MonoBehaviour
 
     public void Attack()
     {
-        hasTarget = true;
+        attacking = true;
+
+        ai.canMove = false;
 
         // Gather hitboxes of enemy
-        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange);
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         // Loop through array 
         foreach(Collider2D col in hitObjects)
@@ -99,17 +106,33 @@ public class RedKnight : MonoBehaviour
         }
 
         PlayAnimation("KnightAttack");
+        canAttack = false;
+
+        StartCoroutine(WaitToResetAttack());
     }
 
     public void CheckState()
     {
         if (ai.canMove)
         {
-            PlayAnimation("KnightWalk");
+            moving = true;
         }
         else
         {
+            moving = false;
+        }
+
+        if (moving)
+        {
+            PlayAnimation("KnightWalk");
+        }
+        else if (!moving && !attacking)
+        {
             PlayAnimation("KnightIdle");
+        }
+        else if (!moving && attacking)
+        {
+            PlayAnimation("KnightAttack");
         }
     }
 
@@ -128,6 +151,13 @@ public class RedKnight : MonoBehaviour
     public void PlayAnimation(string animation)
     {
         animator.Play(animation);
+    }
+
+    IEnumerator WaitToResetAttack()
+    {
+        yield return new WaitForSeconds(2);
+
+        canAttack = true;
     }
 
     private void OnDrawGizmosSelected()
